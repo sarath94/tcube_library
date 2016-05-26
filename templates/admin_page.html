@@ -39,7 +39,7 @@
             <div class="collapsible-body">
 
             <div class="row">
-              <form action="/work/add_course/" id="addCourse" onsubmit="return(courseValidate());" enctype="multipart/form-data" method="POST" name="addCourse">
+              <form action="/work/admin_page/" id="addCourse" onsubmit="return(courseValidate());" enctype="multipart/form-data" method="POST" name="addCourse">
               {%csrf_token%}
               <div class="input-field col s4 offset-s1">
                 <input placeholder="Course Name Here" id="course_name" name="course_name" type="text" required>
@@ -84,7 +84,7 @@
       <div class="collapsible-body">
 
       <div class="row">
-        <form action="/work/upload_file/" id="uploadFile" onsubmit="return(uploadValidate());" enctype="multipart/form-data" method="POST" name="uploadFile">
+        <form action="/work/admin_page/" id="uploadFile" onsubmit="return(uploadValidate());" enctype="multipart/form-data" method="POST" name="uploadFile">
         {%csrf_token%}
           <div class="input-field col s4 offset-s1">
             <select name="file_type">
@@ -237,7 +237,25 @@
         alert("Please provide Discipline!");
         return false;
      }
-     return(true);
+       var formData = new FormData($('form')[0]);
+       $.ajax({
+           url: "/work/add_course/",
+           type: 'POST',
+           data: formData,
+           async: true,
+           success: function(response) {
+             if(response=="true"){
+               alert("Course Added");
+            }
+            else if(response=="false"){
+              alert("Course already exists");
+            }
+           },
+           cache: false,
+           contentType: false,
+           processData: false
+       });
+     return(false);
   }
 
   function uploadValidate()
@@ -261,19 +279,15 @@
          var ext = fileName.substring(fileName.lastIndexOf('.') + 1);
          if((ext =="ppt" || ext =="PPT") && document.uploadFile.file_type.value == 'ppt')
          {
-           return true;
          }
-         if((ext =="pptx" || ext =="PPTX") && document.uploadFile.file_type.value == 'ppt')
+         else if((ext =="pptx" || ext =="PPTX") && document.uploadFile.file_type.value == 'ppt')
          {
-           return true;
          }
-         if((ext == "pdf" || ext == "PDF") && document.uploadFile.file_type.value == 'pdf')
+         else if((ext == "pdf" || ext == "PDF") && document.uploadFile.file_type.value == 'pdf')
          {
-           return true;
          }
-         if((ext == "mp4" || ext == "avi" || ext == "mkv") && document.uploadFile.file_type.value == 'video')
+         else if((ext == "mp4" || ext == "avi" || ext == "mkv") && document.uploadFile.file_type.value == 'video')
          {
-           return true;
          }
          else
          {
@@ -281,55 +295,27 @@
            return false;
          }
        }
+       var form = $('form')[1]; // You need to use standart javascript object here
+       var formData = new FormData(form);
+       $.ajax({
+           url: "/work/upload_file/",
+           type: 'POST',
+           data: formData,
+           async: true,
+           success: function(response) {
+             if(response=="true"){
+               alert("File Uploaded");
+            }
+            else if(response=="false"){
+              alert("File Upload failed");
+            }
+           },
+           cache: false,
+           contentType: false,
+           processData: false
+       });
+       return false;
   }
-    $('#addCourse').submit(function(){
-      var formData = new FormData($(this)[0]);
-      $.ajax({
-          url: "/work/add_course/",
-          type: 'POST',
-          data: formData,
-          async: true,
-          success: function(response) {
-            if(response=="true"){
-              alert("Course Added");
-           }
-           else if(response=="false"){
-             alert("Course already exists");
-           }
-          },
-          cache: false,
-          contentType: false,
-          processData: false
-      });
-      return false;
-  });
-  $("#uploadFile").submit(function(){
-    var formData = new FormData($(this)[0]);
-    $.ajax({
-        url: "/work/upload_file/",
-        type: 'POST',
-        data: formData,
-        async: true,
-        success: function(response) {
-          if(response=="true"){
-            alert("File Uploaded");
-         }
-         else if(response=="false"){
-           alert("File Upload failed");
-         }
-        },
-        cache: false,
-        contentType: false,
-        processData: false
-    });
-
-    return false;
-});
-
-    function getKeywords(){
-
-    }
-
     function accept(element){
       var keywordElement = element.childNodes;
       var keyword = keywordElement[5].innerHTML;
