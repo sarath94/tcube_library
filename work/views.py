@@ -11,6 +11,29 @@ from . import b
 import subprocess
 import md5,os
 
+def convert_video(name):
+    file_name, file_extension = os.path.splitext(name)
+    os.system("https_proxy='https://nareshk16:nareshk16*@proxy.cse.iitb.ac.in:80' http_proxy='http://nareshk16:nareshk16*@proxy.cse.iitb.ac.in:80' ftp='ftp://nareshk16:nareshk16*@proxy.cse.iitb.ac.in:80' socks='socks://nareshk16:nareshk16*@proxy.cse.iitb.ac.in:80' autosub myapp/static/files/"+name)
+    os.system("mv myapp/static/files/"+file_name+".srt myapp/static/txt/")
+    #print "sudo mv myapp/static/files/"+file_name+".srt myapp/static/files/text"
+    print "done"
+
+def convert_pdf(name):
+    print "ikujgh"
+    file_name, file_extension = os.path.splitext(name)
+    os.system("pdftotext -layout myapp/static/files/"+name)
+    os.system("sudo mv myapp/static/files/"+file_name+".txt myapp/static/txt/")
+    print "done"
+
+def convert_ppt(name):
+    file_name, file_extension = os.path.splitext(name)
+    os.system("libreoffice --headless --convert-to pdf --outdir myapp/static/txt/ myapp/static/files/"+name)
+    os.system("pdftotext -layout myapp/static/txt/"+file_name+".pdf")
+    os.system("mv myapp/static/txt/"+file_name+".txt myapp/static/txt/")
+    os.system("rm myapp/static/txt/"+file_name+".pdf")
+    print "done"
+
+
 def test(request):
     return render(request, 'test5.html', {})
 
