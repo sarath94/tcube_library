@@ -11,6 +11,30 @@ from . import b
 import subprocess
 import md5,os
 
+
+def convert_video(name):
+    file_name, file_extension = os.path.splitext(name)
+    os.system("https_proxy='https://nareshk16:nareshk16*@proxy.cse.iitb.ac.in:80' http_proxy='http://nareshk16:nareshk16*@proxy.cse.iitb.ac.in:80' ftp='ftp://nareshk16:nareshk16*@proxy.cse.iitb.ac.in:80' socks='socks://nareshk16:nareshk16*@proxy.cse.iitb.ac.in:80' autosub myapp/static/files/"+name)
+    os.system("mv myapp/static/files/"+file_name+".srt myapp/static/txt/")
+    #print "sudo mv myapp/static/files/"+file_name+".srt myapp/static/files/text"
+    print "done"
+
+def convert_pdf(name):
+    print "ikujgh"
+    file_name, file_extension = os.path.splitext(name)
+    os.system("pdftotext -layout myapp/static/files/"+name)
+    os.system("sudo mv myapp/static/files/"+file_name+".txt myapp/static/txt/")
+    print "done"
+
+def convert_ppt(name):
+    file_name, file_extension = os.path.splitext(name)
+    os.system("libreoffice --headless --convert-to pdf --outdir myapp/static/txt/ myapp/static/files/"+name)
+    os.system("pdftotext -layout myapp/static/txt/"+file_name+".pdf")
+    os.system("mv myapp/static/txt/"+file_name+".txt myapp/static/txt/")
+    os.system("rm myapp/static/txt/"+file_name+".pdf")
+    print "done"
+
+
 def test(request):
     return render(request, 'test5.html', {})
 
@@ -78,23 +102,35 @@ def upload_file(request):
 		filedb.txt_path='fhvg'
 		filedb.file_name=request.FILES['datafile'].name
 		filedb.course_id_fk=Course.objects.get(course_name=request.POST['course'])
-		try:
-			filedb.save()
-			file_obj = File.objects.raw("SELECT file_id from file where file_name='%s'" %request.FILES['datafile'].name)
-			if(len(request.POST['keywords']) != 0):
-				keyword_list = request.POST['keywords']
-		                keyword_list = keyword_list.split(',')
-				for keyword in keyword_list:
-					if(len(keyword) != 0):
-						keyworddb = Keyword()
-						keyworddb.file_id_fk = file_obj[0]
-						keyworddb.keyword = keyword
-						keyworddb.save()
-			return HttpResponse("true")
-		except:
-			return HttpResponse("false")
-	else:
-		return redirect("/work/admin_login/")
+        #print request.POST['file_type']
+        try:
+            filedb.save()
+            name=request.FILES['datafile'].name
+            if request.POST['file_type']=='video':
+                p = Process(target=convert_video,args=(name,))
+                p.start()
+            if request.POST['file_type']=='ppt':
+                p=Process(target=convert_ppt,args=(name,))
+                p.start()
+            if request.POST['file_type']=='pdf':
+                p=Process(target=convert_pdf,args=(name,))
+                p.start();
+            file_obj = File.objects.raw("SELECT file_id from file where file_name='%s'" %request.FILES['datafile'].name)
+            if(len(request.POST['keywords']) != 0):
+                keyword_list = request.POST['keywords']
+                keyword_list = keyword_list.split(',')
+                for keyword in keyword_list:
+                    if(len(keyword) != 0):
+                        keyworddb = Keyword()
+                        keyworddb.file_id_fk = file_obj[0]
+                        keyworddb.keyword = keyword
+                        keyworddb.save()
+            return HttpResponse("true")
+        except Exception, err:
+            print Exception, err
+            return HttpResponse("false")
+    	else:
+            return redirect("/admin_login/")
 
 @csrf_exempt
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)

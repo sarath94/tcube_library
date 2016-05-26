@@ -35,7 +35,7 @@ def admin_page(request):
 		admin_id = request.session['admin_id']
 		course_list=Course.objects.raw("Select course_id,course_name from course")
 		discipline_list=Discipline.objects.all()
-        file_list = File.objects.raw('select course.course_id,course.course_name,file.file_id,file.file_name,file.file_type from course,file where course.course_id=file.course_id_fk')
+        	file_list = File.objects.raw('select course.course_id,course.course_name,file.file_id,file.file_name,file.file_type from course,file where course.course_id=file.course_id_fk')
 		keyword_list = File.objects.raw('SELECT file_id,file_name,keyword from `file`,(SELECT * FROM `temp_keyword`) as keytable where file.file_id=keytable.file_id_fk')
 		data = {'admin_id':admin_id, 'course_list':course_list,'discipline_list':discipline_list,'keyword_list':keyword_list,'file_list':file_list}
 		data.update((csrf(request)))
