@@ -19,7 +19,6 @@ def convert_video(name):
     print "done"
 
 def convert_pdf(name):
-    print "ikujgh"
     file_name, file_extension = os.path.splitext(name)
     os.system("pdftotext -layout myapp/static/files/"+name)
     os.system("sudo mv myapp/static/files/"+file_name+".txt myapp/static/txt/")
