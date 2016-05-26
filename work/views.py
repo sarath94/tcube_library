@@ -8,34 +8,33 @@ from django.views.decorators.csrf import csrf_exempt
 from django.template import RequestContext
 from .models import Admin, Course, Discipline, File, Keyword, TempKeyword
 from . import b
+from multiprocessing import Process
 import subprocess
 import md5,os
 
+def test(request):
+    return render(request, 'test5.html', {})
 
 def convert_video(name):
     file_name, file_extension = os.path.splitext(name)
-    os.system("https_proxy='https://nareshk16:nareshk16*@proxy.cse.iitb.ac.in:80' http_proxy='http://nareshk16:nareshk16*@proxy.cse.iitb.ac.in:80' ftp='ftp://nareshk16:nareshk16*@proxy.cse.iitb.ac.in:80' socks='socks://nareshk16:nareshk16*@proxy.cse.iitb.ac.in:80' autosub myapp/static/files/"+name)
-    os.system("mv myapp/static/files/"+file_name+".srt myapp/static/txt/")
-    #print "sudo mv myapp/static/files/"+file_name+".srt myapp/static/files/text"
+    os.system("https_proxy='https://nareshk16:nareshk16*@proxy.cse.iitb.ac.in:80' http_proxy='http://nareshk16:nareshk16*@proxy.cse.iitb.ac.in:80' ftp='ftp://nareshk16:nareshk16*@proxy.cse.iitb.ac.in:80' socks='socks://nareshk16:nareshk16*@proxy.cse.iitb.ac.in:80' autosub work/static/files/"+name)
+    os.system("mv work/static/files/"+file_name+".srt work/static/txt/")
+    #print "sudo mv work/static/files/"+file_name+".srt work/static/files/text"
     print "done"
 
 def convert_pdf(name):
     file_name, file_extension = os.path.splitext(name)
-    os.system("pdftotext -layout myapp/static/files/"+name)
-    os.system("sudo mv myapp/static/files/"+file_name+".txt myapp/static/txt/")
+    os.system("pdftotext -layout work/static/files/"+name)
+    os.system("sudo mv work/static/files/"+file_name+".txt work/static/txt/")
     print "done"
 
 def convert_ppt(name):
     file_name, file_extension = os.path.splitext(name)
-    os.system("libreoffice --headless --convert-to pdf --outdir myapp/static/txt/ myapp/static/files/"+name)
-    os.system("pdftotext -layout myapp/static/txt/"+file_name+".pdf")
-    os.system("mv myapp/static/txt/"+file_name+".txt myapp/static/txt/")
-    os.system("rm myapp/static/txt/"+file_name+".pdf")
+    os.system("libreoffice --headless --convert-to pdf --outdir work/static/txt/ work/static/files/"+name)
+    os.system("pdftotext -layout work/static/txt/"+file_name+".pdf")
+    os.system("mv work/static/txt/"+file_name+".txt work/static/txt/")
+    os.system("rm work/static/txt/"+file_name+".pdf")
     print "done"
-
-
-def test(request):
-    return render(request, 'test5.html', {})
 
 def search(request):
 #    print request.GET.get('query','')
@@ -60,6 +59,7 @@ def admin_page(request):
 		discipline_list=Discipline.objects.all()
         	file_list = File.objects.raw('select course.course_id,course.course_name,file.file_id,file.file_name,file.file_type from course,file where course.course_id=file.course_id_fk')
 		keyword_list = File.objects.raw('SELECT file_id,file_name,keyword from `file`,(SELECT * FROM `temp_keyword`) as keytable where file.file_id=keytable.file_id_fk')
+
 		data = {'admin_id':admin_id, 'course_list':course_list,'discipline_list':discipline_list,'keyword_list':keyword_list,'file_list':file_list}
 		data.update((csrf(request)))
 		return render_to_response("admin_page.html", data)
@@ -87,8 +87,8 @@ def auth_admin(request):
 def admin_logout(request):
 	try:
 		del request.session['admin_id']
-	except:
-		pass
+	except Exception,e:
+        	print str(e)
 	return redirect("/work/admin_login/")
 
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)
@@ -101,35 +101,34 @@ def upload_file(request):
 		filedb.txt_path='fhvg'
 		filedb.file_name=request.FILES['datafile'].name
 		filedb.course_id_fk=Course.objects.get(course_name=request.POST['course'])
-        #print request.POST['file_type']
-        try:
-            filedb.save()
-            name=request.FILES['datafile'].name
-            if request.POST['file_type']=='video':
-                p = Process(target=convert_video,args=(name,))
-                p.start()
-            if request.POST['file_type']=='ppt':
-                p=Process(target=convert_ppt,args=(name,))
-                p.start()
-            if request.POST['file_type']=='pdf':
-                p=Process(target=convert_pdf,args=(name,))
-                p.start();
-            file_obj = File.objects.raw("SELECT file_id from file where file_name='%s'" %request.FILES['datafile'].name)
-            if(len(request.POST['keywords']) != 0):
-                keyword_list = request.POST['keywords']
-                keyword_list = keyword_list.split(',')
-                for keyword in keyword_list:
-                    if(len(keyword) != 0):
-                        keyworddb = Keyword()
-                        keyworddb.file_id_fk = file_obj[0]
-                        keyworddb.keyword = keyword
-                        keyworddb.save()
-            return HttpResponse("true")
-        except Exception, err:
-            print Exception, err
-            return HttpResponse("false")
-    	else:
-            return redirect("/admin_login/")
+		try:
+			filedb.save()
+			name=request.FILES['datafile'].name
+			if request.POST['file_type']=='video':
+                		p = Process(target=convert_video,args=(name,))
+                		p.start()
+            		if request.POST['file_type']=='ppt':
+                		p=Process(target=convert_ppt,args=(name,))
+                		p.start()
+            		if request.POST['file_type']=='pdf':
+                		p=Process(target=convert_pdf,args=(name,))
+                		p.start();
+			file_obj = File.objects.raw("SELECT file_id from file where file_name='%s'" %request.FILES['datafile'].name)
+			if(len(request.POST['keywords']) != 0):
+				keyword_list = request.POST['keywords']
+		                keyword_list = keyword_list.split(',')
+				for keyword in keyword_list:
+					if(len(keyword) != 0):
+						keyworddb = Keyword()
+						keyworddb.file_id_fk = file_obj[0]
+						keyworddb.keyword = keyword
+						keyworddb.save()
+			return HttpResponse("true")
+		except Exception,e:
+			print str(e)
+			return HttpResponse("false")
+	else:
+		return redirect("/work/admin_login/")
 
 @csrf_exempt
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)
@@ -141,9 +140,10 @@ def add_course(request):
         course.type_of_course = request.POST['course_type']
         course.discipline = Discipline.objects.get(discipline = request.POST['discipline'])
         try:
-            couse.save()
+            course.save()
             return HttpResponse("true")
-        except:
+        except Exception,e:
+            print str(e)
             return HttpResponse("false")
     else:
         return redirect("/work/admin_login/")
