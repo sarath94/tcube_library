@@ -1,0 +1,38 @@
+#!/usr/bin/env python
+import os,sys,glob
+import lucene
+from lucene import SimpleFSDirectory, System, File, Document, Field, \
+StandardAnalyzer, IndexWriter, Version
+"""
+Example of Indexing with PyLucene 3.0
+"""
+def luceneIndexer():
+
+	"""
+	Index Documents from a directory
+	"""
+
+	lucene.initVM()
+	INDEXIDR = "./work/static/indexes/"
+	indexdir = SimpleFSDirectory(File(INDEXIDR))
+	analyzer = StandardAnalyzer(Version.LUCENE_30)
+	index_writer = IndexWriter(indexdir,analyzer,True,IndexWriter.MaxFieldLength.UNLIMITED)
+#	for tfile in glob.glob(os.path.join(DIRTOINDEX,'*.txt')):
+	for root, dirs, files in os.walk("./work/static/files/"):
+	    path = root.split('/')
+	    for tfile in files:
+			#if not (tfile.endswith('.txt') or tfile.endswith('.srt')):
+			#	continue
+#			print(tfile)
+			print "Indexing: ", os.path.join(os.path.abspath(root),tfile)
+			document = Document()
+			content = open(os.path.join(os.path.abspath(root),tfile),'r').read()
+			document.add(Field("text",content,Field.Store.YES,Field.Index.ANALYZED))
+			document.add(Field("filename",os.path.join(os.path.abspath(root),tfile),Field.Store.YES,Field.Index.NOT_ANALYZED))
+			index_writer.addDocument(document)
+			print "Done: ", tfile
+	index_writer.optimize()
+	print index_writer.numDocs()
+	index_writer.close()
+
+luceneIndexer()

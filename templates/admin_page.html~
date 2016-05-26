@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html>
+<head>
+   <title>Admin Page</title>
+    <!--Import Google Icon Font-->
+   <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+   <!--Import materialize.css-->
+   <link type="text/css" rel="stylesheet" href="/static/css/materialize.min.css"  media="screen,projection"/>
+   <!--Let browser know website is optimized for mobile-->
+   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+</head>
+<body>
+   <!--Import jQuery before materialize.js-->
+   <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+   <script type="text/javascript" src="/static/js/materialize.min.js"></script>
+
+   <nav>
+    <div class="nav-wrapper">
+      <a href="#" class="brand-logo"><img src="logo.png" hieght="80" width="80"></a>
+      <ul id="nav-mobile" class="right hide-on-med-and-down">
+        <li><a href="#">Sass</a></li>
+        <li><a href="#">Components</a></li>
+        <li><a href="/work/admin_logout">Log Out</a></li>
+      </ul>
+    </div>
+  </nav>
+
+
+
+   <div class="container">
+      <div class="card-panel teal lighten-2">
+        <h4 align="center">Welcome {{admin_id}}</h4>
+      </div>
+
+
+        <ul class="collapsible" data-collapsible="accordion">
+          <li>
+            <div class="collapsible-header"><i class="material-icons">filter_drama</i><h5>Add Course</h5></div>
+            <div class="collapsible-body">
+
+            <div class="row">
+              <form action="/work/add_course/" id="addCourse" onsubmit="return(courseValidate());" enctype="multipart/form-data" method="POST" name="addCourse">
+              {%csrf_token%}
+              <div class="input-field col s4 offset-s1">
+                <input placeholder="Course Name Here" id="course_name" name="course_name" type="text" required>
+                <label>Course Name</label>
+              </div>
+                <div class="input-field col s4 offset-s1">
+                  <select required name="course_type">
+                    <option value="-1" disabled selected>Choose type of Course</option>
+                    <option value="main">Main</option>
+                    <option value="co_ordinated">Co-ordinated</option>
+                  </select>
+                  <label>Course Type</label>
+                </div>
+
+                <div class="input-field col s4 offset-s1">
+                  <select name="discipline">
+                    <option value="-1" disabled selected>Choose Discipline</option>
+                    {%for discipline in discipline_list%}
+                    <option value="{{discipline}}">{{discipline}}</option>
+                    {%endfor%}
+                  </select>
+                  <label>Discipline</label>
+                </div>
+
+                <br>
+
+                <br>
+                <div style="padding:60px;">
+                <button class="btn waves-effect waves-light col s2 offset-s1" type="submit" name="action">Submit
+                  <i class="material-icons right">send</i>
+                </button>
+                </div>
+              </form>
+            </div>
+
+            </div>
+
+          </li>
+
+    <li>
+      <div class="collapsible-header"><i class="material-icons">filter_drama</i><h5>Upload Files</h5></div>
+      <div class="collapsible-body">
+
+      <div class="row">
+        <form action="/work/upload_file/" id="uploadFile" onsubmit="return(uploadValidate());" enctype="multipart/form-data" method="POST" name="uploadFile">
+        {%csrf_token%}
+          <div class="input-field col s4 offset-s1">
+            <select name="file_type">
+              <option value="-1" disabled selected>Choose type of file</option>
+              <option value="video">VIDEO</option>
+              <option value="ppt">PPT</option>
+              <option value="pdf">PDF</option>
+            </select>
+            <label>File Type</label>
+          </div>
+
+          <div class="input-field col s4 offset-s1">
+            <select name="course">
+              <option value="-1" disabled selected>Choose course name</option>
+              {%for course in course_list%}
+              <option value="{{course}}">{{course}}</option>
+              {%endfor%}
+            </select>
+            <label>Course Type</label>
+          </div>
+
+          <br>
+
+          <div class="input-field col s4 offset-s1">
+            <input placeholder="Keywords Here" onkeypress='return(keywordValidate(event))' id="keywords" type="text" name="keywords">
+            <label>Suggest Keywords</label>
+          </div>
+
+          <br>
+          <div class="file-field input-field col s4 offset-s1">
+            <div class="btn">
+              <span>File</span>
+              <input type="file" name="datafile" id="file_name">
+            </div>
+            <div class="file-path-wrapper">
+              <input class="file-path validate" type="text">
+            </div>
+          </div>
+
+          <button class="btn waves-effect waves-light col s2 offset-s1" type="submit" name="action">Submit
+            <i class="material-icons right">send</i>
+          </button>
+        </form>
+      </div>
+
+      </div>
+
+    </li>
+    <li>
+      <div class="collapsible-header"><i class="material-icons">place</i><h5>Review The Content</h5></div>
+      <div class="collapsible-body"><p></p></div>
+    </li>
+    <li>
+      <div class="collapsible-header"><i class="material-icons">whatshot</i><h5>Accept keywords</h5></div>
+      <div class="collapsible-body">
+        <div class="col s12">
+        <table class="striped centered">
+          <thead class="blue-grey darken-l">
+            <tr>
+                <th data-field="id">File Id</th>
+                <th data-field="id">File Name</th>
+                <th data-field="name">Keyword</th>
+                <th data-field="price">Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <form action="#">
+            {% for keywords in keyword_list %}
+            <tr id="{{keywords.file_id}}">
+              <td id="{{keywords.file_id}}">{{keywords.file_id}}</td>
+              <td id="{{keywords.file_name}}"><a href="/static/files/{{keywords.file_name}}">{{keywords.file_name}}</a></td>
+              <td id="{{keywords.keyword}}">{{keywords.keyword}}</td>
+              <td id="{{keywords.file_id}},{{keywords.file_name}}">
+                  <a id="{{keywords.file_id}}" onclick="accept(this,this.parentNode.parentNode);" class="btn-floating btn-medium waves-effect waves-light red"><i id="{{keywords.file_id}}" class="material-icons">done</i></a>
+                    &nbsp &nbsp
+                  <a id="{{keywords.file_id}}" onclick="reject(this);" class="btn-floating btn-medium waves-effect waves-light red"><i id="{{keywords.file_id}}" class="material-icons">clear</i></a>
+              </td>
+            </tr>
+            {% endfor %}
+          </form>
+          </tbody>
+        </table>
+      </div>
+      </div>
+    </li>
+  </ul>
+
+
+
+   </div>
+
+
+<script type="text/javascript">
+
+  $(document).ready(function() {
+    $('select').material_select();
+  });
+
+  function keywordValidate(e)
+  {
+      // Allow: backspace, delete, tab, escape, enter and ,
+      var charCode = e.which || e.charCode || e.keyCode || 0;
+      if (!((e.keyCode >=23 && e.keyCode <=43) ||
+            (e.keyCode >=45 && e.keyCode<=96) ||
+            (e.keyCode >=123 && e.keyCode<=126))){
+            return true;
+        }
+        return false;
+        // Ensure that it is a number and stop the keypress
+/*        if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
+            e.preventDefault();
+        }*/
+  }
+
+  function courseValidate()
+  {
+
+     if(document.addCourse.course_type.value == "-1")
+     {
+        alert("Please provide Course Type!");
+        return false;
+     }
+
+     if(document.addCourse.discipline.value == "-1")
+     {
+        alert("Please provide Discipline!");
+        return false;
+     }
+     return(true);
+  }
+
+  function uploadValidate()
+  {
+
+     if(document.uploadFile.file_type.value == "-1")
+     {
+        alert("Please provide File Type!");
+        return false;
+     }
+
+     if(document.uploadFile.course.value == "-1")
+     {
+        alert("Please provide Course Name!");
+        return false;
+     }
+
+     {
+         var file = document.getElementById('file_name');
+         var fileName = file.value;
+         var ext = fileName.substring(fileName.lastIndexOf('.') + 1);
+         if((ext =="ppt" || ext =="PPT") && document.uploadFile.file_type.value == 'ppt')
+         {
+           return true;
+         }
+         if((ext =="pptx" || ext =="PPTX") && document.uploadFile.file_type.value == 'ppt')
+         {
+           return true;
+         }
+         if((ext == "pdf" || ext == "PDF") && document.uploadFile.file_type.value == 'pdf')
+         {
+           return true;
+         }
+         if((ext == "mp4" || ext == "avi" || ext == "mkv") && document.uploadFile.file_type.value == 'video')
+         {
+           return true;
+         }
+         else
+         {
+           alert ("file type and file uploaded do not match!")
+           return false;
+         }
+       }
+
+     return(true);
+  }
+    $('#addCourse').submit(function(){
+      var formData = new FormData($(this)[0]);
+      $.ajax({
+          url: "/work/add_course/",
+          type: 'POST',
+          data: formData,
+          async: true,
+          success: function(response) {
+            if(response=="true"){
+              alert("Course Added");
+           }
+           else if(response=="false"){
+             alert("Course already exists");
+           }
+          },
+          cache: false,
+          contentType: false,
+          processData: false
+      });
+      return false;
+  });
+  $("#uploadFile").submit(function(){
+    var formData = new FormData($(this)[0]);
+    $.ajax({
+        url: "/work/upload_file/",
+        type: 'POST',
+        data: formData,
+        async: true,
+        success: function(response) {
+          if(response=="true"){
+            alert("File Uploaded");
+         }
+         else if(response=="false"){
+           alert("File Upload failed");
+         }
+        },
+        cache: false,
+        contentType: false,
+        processData: false
+    });
+
+    return false;
+});
+
+    function getKeywords(){
+
+    }
+
+    function accept(status,element){
+      var keywordElement = element.childNodes;
+      var keyword = keywordElement[5].innerHTML;
+      var file_id = keywordElement[1].innerHTML;
+      $.ajax({
+          url: "/work/add_keyword/",
+          type: 'GET',
+          data: "file_id_fk="+file_id+"&keyword="+keyword,
+          async: true,
+          success: function(response) {
+            if(response=="true"){
+              $("#"+keywordElement[7].id).hide();
+              $("#"+keywordElement[7].id).hide();
+              var content = document.createTextNode("<td>Accepted</td>");
+              element.parentNode.appendChild(content);
+           }
+           else if(response=="false"){
+             alert("Keyword already exists");
+           }
+          },
+          cache: false,
+          contentType: false,
+          processData: false
+      });
+      return false;
+      alert(file_id + " " + keyword);
+    }
+    function reject(element){
+      var parent = element.parentNode;
+      $("#"+element.id).hide();
+      $("#"+element.id).hide();
+      var content = document.createTextNode("Rejected");
+      parent.appendChild(content);
+    }
+</script>
+
+</body>
+</html>
