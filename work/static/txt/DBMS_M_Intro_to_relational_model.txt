@@ -1,0 +1,332 @@
+Chapter 2: Intro to Relational Model
+
+
+
+
+        Database System Concepts, 6th Ed.
+             ©Silberschatz, Korth and Sudarshan
+        See www.db-book.com for conditions on re-use
+                                         Example of a Relation
+
+                                                                   attributes
+                                                                 (or columns)
+
+
+
+                                                                   tuples
+                                                                 (or rows)
+
+
+
+
+Database System Concepts - 6th Edition            2.2        ©Silberschatz, Korth and Sudarshan
+                                         Attribute Types
+
+                  The set of allowed values for each attribute is called the
+                       domain of the attribute
+                  Attribute values are (normally) required to be atomic; that
+                       is, indivisible
+                  The special value null is a member of every domain
+                  The null value causes complications in the definition of
+                       many operations
+
+
+
+
+Database System Concepts - 6th Edition           2.3                ©Silberschatz, Korth and Sudarshan
+                            Relation Schema and Instance
+        A1, A2, …, An are attributes
+
+
+        R = (A1, A2, …, An ) is a relation schema
+             Example:
+                  instructor = (ID, name, dept_name, salary)
+        Notation: Relation ↔ table,        tuple ↔ row
+
+
+
+
+Database System Concepts - 6th Edition        2.4              ©Silberschatz, Korth and Sudarshan
+                                  Relations are Unordered
+
+             Order of tuples is irrelevant (tuples may be stored in an arbitrary
+            order)
+             Example: instructor relation with unordered tuples
+
+
+
+
+Database System Concepts - 6th Edition        2.5                  ©Silberschatz, Korth and Sudarshan
+                                          Database
+        A database consists of multiple relations
+        Information about an enterprise is broken up into parts
+                  instructor
+                  student
+                  advisor
+        Bad design:
+                 univ (instructor -ID, name, dept_name, salary, student_Id, ..)
+             results in
+                  repetition of information (e.g., two students have the same
+                   instructor)
+                  the need for null values (e.g., represent an student with no
+                   advisor)
+        Normalization theory (Chapter 7) deals with how to design “good”
+             relational schemas
+
+Database System Concepts - 6th Edition          2.6                  ©Silberschatz, Korth and Sudarshan
+                                                Keys
+              Let K  R
+              K is a superkey of R if values for K are sufficient to identify a
+                   unique tuple of each possible relation r(R)
+                        Example: {ID} and {ID,name} are both superkeys of instructor.
+              Superkey K is a candidate key if K is minimal
+                   Example: {ID} is a candidate key for Instructor
+              One of the candidate keys is selected to be the primary key.
+
+                        which one?
+              Foreign key constraint: Value in one relation must appear in
+                   another
+                        Referencing relation
+                        Referenced relation
+
+
+Database System Concepts - 6th Edition            2.7                ©Silberschatz, Korth and Sudarshan
+                   Schema Diagram for University Database
+
+
+
+
+Database System Concepts - 6th Edition   2.8     ©Silberschatz, Korth and Sudarshan
+                               Relational Query Languages
+              Procedural vs.non-procedural, or declarative
+              “Pure” languages:
+                        Relational algebra
+                            Relational   operators
+                        Tuple relational calculus
+                        Domain relational calculus
+              Query languages
+                        SQL
+
+
+
+
+Database System Concepts - 6th Edition                2.9     ©Silberschatz, Korth and Sudarshan
+                                         Selection of tuples
+
+
+               Relation r
+
+
+
+
+       Select tuples with A=B
+          and D > 5
+
+       σA=B and D > 5(r)
+
+
+       Quiz Q1:
+       σA<> B OR D < 7 (r) has (1) 1 tuple (2) 2 tuples (3) 3 tuples (4) 4 tuples
+
+Database System Concepts - 6th Edition           2.10          ©Silberschatz, Korth and Sudarshan
+                       Selection of Columns (Attributes)
+
+               Relation r:
+
+
+
+
+             Select A and C
+                   Projection
+
+                   πA, C(r)
+
+
+    Quiz Q2:
+    The projection operation (1) removes duplicates (2) does not remove duplicates
+Database System Concepts - 6th Edition   2.11                 ©Silberschatz, Korth and Sudarshan
+            Joining two relations – Cartesian Product
+             Relations r, s:
+
+
+
+
+             r x s:
+
+
+
+
+Database System Concepts - 6th Edition   2.12   ©Silberschatz, Korth and Sudarshan
+                                 Composition of Operations
+             Can build expressions using multiple operations
+             Example: A=C(r x s)
+
+
+             rxs
+
+
+
+
+             A=C(r x s)
+
+
+
+
+Database System Concepts - 6th Edition         2.13             ©Silberschatz, Korth and Sudarshan
+                Union, Intersection and Set Difference
+             Relations r, s:
+
+
+
+
+                 Union:                  Intersection     Set Difference
+                      rs                  r  s:            r - s:
+
+
+
+
+Database System Concepts - 6th Edition              2.14       ©Silberschatz, Korth and Sudarshan
+                                         Natural Join Example
+             Relations r, s:
+
+
+
+
+              Natural Join
+                     r         s
+
+
+
+
+     Quiz Q3: The natural join operation matches tuples (rows) whose values
+     for common attributes are (1) not equal (2) equal (3) weird Greek letters (4) null
+
+Database System Concepts - 6th Edition           2.15                     ©Silberschatz, Korth and Sudarshan
+                    Joining two relations – Natural Join
+
+             Let r and s be relations on schemas R and S respectively.
+                  Then, the “natural join” of relations R and S is a relation on
+                  schema R  S obtained as follows:
+                       Consider each pair of tuples tr from r and ts from s.
+                       If tr and ts have the same value on each of the attributes
+                        in R  S, add a tuple t to the result, where
+                          t    has the same value as tr on r
+                          t    has the same value as ts on s
+
+
+
+
+                          r                          s
+
+Database System Concepts - 6th Edition               2.16               ©Silberschatz, Korth and Sudarshan
+                  Aggregate Functions and Operations
+             Aggregation function takes a collection of values and returns a single
+                  value as a result.
+                                            avg: average value
+                                            min: minimum value
+                                            max: maximum value
+                                            sum: sum of values
+                                            count: number of values
+             Aggregate operation in relational algebra
+                             G1 ,G2 ,,Gn     F1 ( A1 ), F2 ( A2 ,, Fn ( An )   (E)
+
+                  E is any relational-algebra expression
+                       G1, G2 …, Gn is a list of attributes on which to group (can be empty)
+                       Each Fi is an aggregate function
+                       Each Ai is an attribute name
+
+             Note: Some books/articles use                        (gamma) instead of    (Calligraphic G)
+
+
+Database System Concepts - 6th Edition                              2.17                 ©Silberschatz, Korth and Sudarshan
+                          Aggregate Operation – Example
+             Relation r:
+
+                                         A    B          C
+
+
+                                                       7
+                                                       7
+                                                       3
+                                                       10
+
+
+
+
+                     sum(c) (r)
+                                         sum(c )
+
+                                             27
+
+
+
+
+Database System Concepts - 6th Edition            2.18        ©Silberschatz, Korth and Sudarshan
+                          Aggregate Operation – Example
+               Find the average salary in each department
+
+                    dept_name            avg(salary) (instructor)
+
+
+
+
+Database System Concepts - 6th Edition                       2.19   ©Silberschatz, Korth and Sudarshan
+                               Aggregate Functions (Cont.)
+             Result of aggregation does not have a name
+                       Can use rename operation to give it a name
+                       For convenience, we permit renaming as part of aggregate
+                        operation
+
+
+                        dept_name        avg(salary) as avg_sal (instructor)
+
+
+
+
+Database System Concepts - 6th Edition                2.20                 ©Silberschatz, Korth and Sudarshan
+  End of Chapter 2
+
+
+
+
+Database System Concepts, 6th Ed.
+     ©Silberschatz, Korth and Sudarshan
+See www.db-book.com for conditions on re-use
+                                            Division Operator
+              Given relations r(R) and s(S), such that S  R, r  s is the largest
+                  relation t(R-S) such that
+                              txsr
+              E.g. let r(ID, course_id) = ID, course_id (takes ) and
+                           s(course_id) = course_id (dept_name=“Biology”(course )
+                  then r  s gives us students who have taken all courses in the Biology
+                  department
+              Can write r  s as
+
+                                         temp1  R-S (r )
+                                         temp2  R-S ((temp1 x s ) – R-S,S (r ))
+                                         result = temp1 – temp2
+                      The result to the right of the  is assigned to the relation variable on
+                       the left of the .
+                      May use variable in subsequent expressions.
+
+
+Database System Concepts - 6th Edition                       2.22                    ©Silberschatz, Korth and Sudarshan
+                            Relation Schema and Instance
+        A1, A2, …, An are attributes
+
+
+        R = (A1, A2, …, An ) is a relation schema
+             Example:
+                  instructor = (ID, name, dept_name, salary)
+        Formally, given sets D1, D2, …. Dn a relation r is a subset of
+                 D 1 x D2 x … x Dn
+             Thus, a relation is a set of n-tuples (a1, a2, …, an) where each ai  Di
+        The current values (relation instance) of a relation are specified by a
+             table
+        An element t of r is a tuple, represented by a row in a table
+
+
+
+
+Database System Concepts - 6th Edition         2.25                 ©Silberschatz, Korth and Sudarshan
+

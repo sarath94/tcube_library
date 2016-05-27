@@ -48,7 +48,7 @@ class File(models.Model):
     file_type = models.CharField(max_length=45)
     actual_path = models.FileField(upload_to="files")
     txt_path = models.CharField(max_length=45)
-    file_name = models.CharField(max_length=45)
+    file_name = models.CharField(max_length=45,unique=True)
     course_id_fk = models.ForeignKey(Course, db_column='course_id_fk')
 
     def __unicode__(self):

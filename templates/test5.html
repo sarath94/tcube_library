@@ -32,45 +32,58 @@
     </div>
     <div id="test2" class="col s12">
 			<div class="row">
-				<div class="col s3">&nbsp</div>
-				<div class="col s6">
-  		<div class="row">
-				<div class="input-field col s12">
+				<div class="col s1">&nbsp</div>
+				<div class="col s10">
 					<form action="/work/search/" method="get">
 						{% csrf_token %}
-				 <input name="query" id="query" type="text" class="validate">
-				 <label for="last_name">Search</label>
-				 <button class="btn waves-effect waves-light" id="f2" type="submit" name="action">Submit
- 					<i class="material-icons right">send</i>
- 				</button>
-			</form>
-			{% if query %}
-					<h3>Results</h3>
-					{% for result in results %}
-							<p>
-									<a href="{{ result.0 }}">{{ result.0 }}</a>
-							</p>
-	<p>
-									{{ result.1 }}
-							</p>
-					{% empty %}
-							<p>No results found.</p>
-					{% endfor %}
 
-					{% if page.has_previous or page.has_next %}
-							<div>
-									{% if page.has_previous %}<a href="?q={{ query }}&amp;page={{ page.previous_page_number }}">{% endif %}&laquo; Previous{% if page.has_previous %}</a>{% endif %}
-									|
-									{% if page.has_next %}<a href="?q={{ query }}&amp;page={{ page.next_page_number }}">{% endif %}Next &raquo;{% if page.has_next %}</a>{% endif %}
-							</div>
-					{% endif %}
-			{% else %}
-					{# Show some example queries to run, maybe query syntax, something else? #}
-			{% endif %}
- 	 		</div>
-			 </div>
-  	</div>
+					<div class="input-field col s7">
+
+
+					 <input name="query" id="query" type="text" class="validate">
+					 <label for="query">Search</label>
+				 	</div>
+					<div class="input-field col s3">
+					 <button class="btn waves-effect waves-light" id="f2" type="submit" name="action">Submit
+	 					<i class="material-icons right">send</i>
+	 				</button>
+					</div>
+				</form>
+				</div>
 	</div>
+
+	<div id="test2" class="col s12">
+		<div class="row">
+			<div class="col s1">&nbsp</div>
+			<div class="col s10">
+				{% if query %}
+							<h4>Results</h4>
+							<br />
+							{% for result in results %}
+									<p>
+											<br>{{ result }}</br>
+											<a href="/static/files/{{ result }}">{{ result }}</a>
+									</p>
+									<br />
+							{% empty %}
+									<p>No results found.</p>
+							{% endfor %}
+
+							{% if page.has_previous or page.has_next %}
+									<div>
+											{% if page.has_previous %}<a href="?q={{ query }}&amp;page={{ page.previous_page_number }}">{% endif %}&laquo; Previous{% if page.has_previous %}</a>{% endif %}
+											|
+											{% if page.has_next %}<a href="?q={{ query }}&amp;page={{ page.next_page_number }}">{% endif %}Next &raquo;{% if page.has_next %}</a>{% endif %}
+									</div>
+							{% endif %}
+					{% else %}
+							{# Show some example queries to run, maybe query syntax, something else? #}
+					{% endif %}
+
+
+
+			</div>
+</div>
 	<div class="col s3">&nbsp</div>
 </div>
 		</div>
