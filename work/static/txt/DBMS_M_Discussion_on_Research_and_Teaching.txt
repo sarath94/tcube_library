@@ -1,0 +1,51 @@
+Discussion on Research and
+         Teaching
+        S. Sudarshan
+         IIT Bombay
+                     Research
+• What is research?
+  – “The systematic investigation into and study of
+    materials and sources in order to establish facts and
+    reach new conclusions.” Oxford English Dict.
+
+
+• Solve a problem in an innovative way
+• Find out a limitation of an existing published
+  solution, and extend it
+              Find Research Area
+• How to find good research areas
+  – Browse through research papers from good conferences
+    and journals
+     • Database Tier 1: ACM SIGMOD, VLDB, IEEE ICDE, EDBT/ICDT
+     • Database Tier 2/3: DASFAA, CSI COMAD, various workshops, ..
+  – Attend good conferences in India
+     • E.g. COMAD conference
+  – View online talks
+  – Find real world problems that are not solved satisfactorily
+     • And abstract them so there is some hope of solving them.
+                     Dig Deep ..
+• Digging deep is key to research: read lots and
+  lots of papers, internalize them
+  – Bachelors: Knows nothing about everything
+  – PhD: Knows everything about nothing!
+• How to learn more about an area
+  – Find some interesting papers and read them
+     • And read key background material required to understand
+       those papers
+  – Find courses which have collected interesting papers
+    on an area, and read them
+     • E.g. papers on query optimization and Big Data covered in CS
+       632, Advanced DBMS, IIT Bombay
+                And Innovate
+• Don’t just accept what you read in a paper
+  – Find limitations, find flaws
+  – Find cases where the ideas described won’t work well
+• Figure out how to extend the ideas, or come up
+  with new ways which will work in those cases
+• Show your ideas work
+  – Implement ideas, do a performance study comparing
+    your approach with others
+       But Avoid Temptations..
+• Plagiarism
+• Fake Journals
+

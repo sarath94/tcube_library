@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+   <title>Admin Page</title>
+    <!--Import Google Icon Font-->
+   <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+   <!--Import materialize.css-->
+   <link type="text/css" rel="stylesheet" href="/static/css/materialize.min.css"  media="screen,projection"/>
+   <!--Let browser know website is optimized for mobile-->
+   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+</head>
+<body>
+   <!--Import jQuery before materialize.js-->
+   <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+   <script type="text/javascript" src="/static/js/materialize.min.js"></script>
+
+   <nav>
+    <div class="nav-wrapper">
+      <a href="#" class="brand-logo"><img src="logo.png" hieght="80" width="80"></a>
+      <ul id="nav-mobile" class="right hide-on-med-and-down">
+        <li><a href="#">Sass</a></li>
+        <li><a href="#">Components</a></li>
+        <li><a href="/work/admin_logout">Log Out</a></li>
+      </ul>
+    </div>
+    </nav>
+    <br>
+
+    <div class="row">
+    <div class="col s6">
+        <video controls="" width="640px" height="395px">
+          <source src="/static/files/{{file_name}}" type="video/mp4">
+          Your browser does not support HTML5 video.
+        </video>
+    </div>
+    <div id="sample" class="col s6">
+
+<!--        <script type="text/javascript" src="/static/js/nicEdit-latest.js"></script>
+        <script type="text/javascript">
+          bkLib.onDomLoaded(function() { nicEditors.allTextAreas() });
+        </script>   -->
+        <script type="text/javascript" src="/static/js/nicEdit-latest.js"></script> <script type="text/javascript">
+        bkLib.onDomLoaded(function() {
+              new nicEditor({maxHeight : 370}).panelInstance('textarea');
+        });
+        </script>
+        <form class="" action="/work/save_reviewed/" method="post">
+          {%csrf_token%}
+        <pre><textarea name="text" style="height: 380px;" id="textarea">{% for line in file_text %}{{line}}{% endfor %}</textarea></pre>
+        <br />
+
+      <input type="hidden" name="file_txt" value="{{file_txt}}">
+        <button class="btn waves-effect waves-light col s2" type="submit" name="action">Save
+        <i class="material-icons right">send</i>
+        </form>
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0"/>
+	<title>Starter Template - Materialize</title>
+
+	<!-- CSS  -->
+	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+	<link href="/static/css/materialize.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+	<link href="/static/css/style.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+</head>
+<body>
+  <style>
+.demo-layout-transparent {
+  background: 'home/naresh/Desktop/yuna.jpg'center / cover;
+}
+.demo-layout-transparent .mdl-layout__header,
+.demo-layout-transparent .mdl-layout__drawer-button {
+  /* This background is dark, so we set text to white. Use 87% black instead if
+     your background is light. */
+  color: blue;
+}
+</style>
+<!-- Modal Trigger -->
+
+  <div class="row">
+    <div class="col s12">
+      <ul class="tabs">
+				<li class="tab col s3"><a class="#test2" href="#test2">Test Search</a></li>
+      </ul>
+    </div>
+
+    <div id="test2" class="col s12">
+			<div class="row">
+				<div class="col s1">&nbsp</div>
+				<div class="col s10">
+					<form action="/work/test_search/" method="GET">
+
+					<div class="input-field col s7">
+
+
+					 <input name="query" id="query" value="{{query}}" type="text" class="validate">
+					 <label for="query">Search</label>
+				 	</div>
+					<div class="input-field col s3">
+					 <button class="btn waves-effect waves-light" id="f2" type="submit" name="action">Submit
+	 					<i class="material-icons right">send</i>
+	 				</button>
+					</div>
+				</form>
+				</div>
+	</div>
+
+	<div id="test2" class="col s12">
+		<div class="row">
+			<div class="col s1">&nbsp</div>
+			<div class="col s7">
+				{% if queryRequest %}
+							{% if page_data.pagecount > 0 %}
+									Page {{page_data.pagenum}} of {{page_data.pagecount}}, Results {{page_data.resultnum}} to {{page_data.resultcount}} of {{page_data.totalresult}}
+							{% endif %}
+							<br />
+							{% for result in result_list %}
+									<p>
+										<strong><a href="/static/txt_test/{{ result.0 }}">{{ result.0 }}</a></strong>
+										<br>{{ result.1|safe }}</br>
+									</p>
+									<br />
+							{% empty %}
+									<p>No results found.</p>
+							{% endfor %}
+
+							{% if page_data.has_previous or page_data.has_next %}
+									<div>
+											{% if page_data.has_previous %}<a href="?query={{ query }}&amp;page={{ page_data.pagenum|add:"-1" }}">{% endif %}&laquo; Previous{% if page_data.has_previous %}</a>{% endif %}
+											|
+											{% if page_data.has_next %}<a href="?query={{ query }}&amp;page={{ page_data.pagenum|add:"1" }}">{% endif %}Next &raquo;{% if page_data.has_next %}</a>{% endif %}
+									</div>
+							{% endif %}
+					{% endif %}
+
+
+
+			</div>
+</div>
+	<div class="col s3">&nbsp</div>
+</div>
+		</div>
+<script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+<script src="/static/js/materialize.js"></script>
+<script src="/static/js/init.js"></script>
+</body>
+</html>

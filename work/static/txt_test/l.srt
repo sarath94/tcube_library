@@ -1,0 +1,3375 @@
+1
+00:00:50,176 --> 00:00:56,320
+Today we start the lecture on the course artificial intelligence
+
+2
+00:00:56,576 --> 00:01:01,184
+Are the scores will be delivered by
+
+3
+00:01:01,440 --> 00:01:07,584
+Sudeshna sarkar myself and process anupam basu both from the computer science and engineering
+
+4
+00:01:07,840 --> 00:01:09,888
+Apartment iit kharagpur
+
+5
+00:01:10,144 --> 00:01:16,288
+The goals for this course is to introduce you to the field of artificial intelligence
+
+6
+00:01:16,544 --> 00:01:22,688
+I want to explain to you the challenges that in harold in building a system that
+
+7
+00:01:22,944 --> 00:01:29,088
+That can be considered to be intelligent in this course will be explaining
+
+8
+00:01:29,344 --> 00:01:35,488
+The key paradigms of artificial intelligence that code techniques and technologies the dangers
+
+9
+00:01:35,744 --> 00:01:39,840
+And outcomes for some of this techniques
+
+10
+00:01:41,376 --> 00:01:47,520
+The instructional objectives of the scores on taking the scores
+
+11
+00:01:48,800 --> 00:01:54,944
+You should be able to understand the role of basic knowledge representation
+
+12
+00:01:55,200 --> 00:01:58,016
+How to represent our knowledge about the world
+
+13
+00:01:58,528 --> 00:02:02,368
+I knowledge of problem solving techniques
+
+14
+00:02:03,392 --> 00:02:08,256
+And a knowledge of some of the learning methods in ai
+
+15
+00:02:08,768 --> 00:02:13,888
+And we will see how these are used to solve
+
+16
+00:02:14,144 --> 00:02:20,288
+Different problems and to build a complete intelligent system
+
+17
+00:02:20,544 --> 00:02:26,688
+Onclick the scores you should be able to assess the applicable
+
+18
+00:02:28,224 --> 00:02:34,368
+The strengths and weaknesses of these methods of the different techniques that we discuss
+
+19
+00:02:34,624 --> 00:02:38,208
+Tvs cash the strengths of this
+
+20
+00:02:38,464 --> 00:02:44,608
+Method and situations where this methods can be applied to solve this entire
+
+21
+00:02:44,864 --> 00:02:48,448
+Types of problems that requires intelligence
+
+22
+00:02:50,752 --> 00:02:53,056
+Evelyn
+
+23
+00:02:53,312 --> 00:02:59,456
+How to develop intelligent systems by assembling solutions 2
+
+24
+00:02:59,712 --> 00:03:05,856
+Concrete computational problems the way we will do it is we will look at the different
+
+25
+00:03:06,112 --> 00:03:12,256
+Components of intelligence and for each of these we will discuss ways
+
+26
+00:03:12,512 --> 00:03:14,560
+Of solving this problems
+
+27
+00:03:14,816 --> 00:03:15,840
+And then
+
+28
+00:03:16,352 --> 00:03:17,632
+Depending on the
+
+29
+00:03:17,888 --> 00:03:21,728
+The full system the functionality of the system that you wish to
+
+30
+00:03:22,240 --> 00:03:28,384
+Constructed engineers you can put together some of these solutions to get the phone
+
+31
+00:03:30,176 --> 00:03:33,504
+After your steak in this course you should be
+
+32
+00:03:33,760 --> 00:03:36,064
+Appreciate the role of
+
+33
+00:03:36,320 --> 00:03:37,344
+Problem solving
+
+34
+00:03:38,368 --> 00:03:40,928
+The role of natural language processing
+
+35
+00:03:41,696 --> 00:03:44,000
+The role of computer vision at cetera
+
+36
+00:03:44,256 --> 00:03:49,120
+Understanding human intelligence from a computational point of view
+
+37
+00:03:53,984 --> 00:04:00,128
+Some more. objectives of the course on taking this course you should be
+
+38
+00:04:00,384 --> 00:04:02,432
+Able to formulate
+
+39
+00:04:02,688 --> 00:04:06,784
+Certain types of problems as state space search problems
+
+40
+00:04:07,040 --> 00:04:13,184
+And you should learn water efficient methods to solve them depending on the characteristics of
+
+41
+00:04:13,440 --> 00:04:14,720
+The problem space
+
+42
+00:04:16,256 --> 00:04:18,047
+You should be able to write
+
+43
+00:04:18,303 --> 00:04:22,399
+Programs that play games to take 22 player games
+
+44
+00:04:23,423 --> 00:04:28,031
+I should be able to use learning to find patterns in data
+
+45
+00:04:28,287 --> 00:04:30,079
+Define rules some data
+
+46
+00:04:30,335 --> 00:04:33,407
+You should be able to build expert systems
+
+47
+00:04:33,663 --> 00:04:38,015
+Different diagnostic and other purposes
+
+48
+00:04:41,087 --> 00:04:45,183
+Somerset exports that we will follow for this course
+
+49
+00:04:45,439 --> 00:04:51,583
+What are the two main me to books which i will be referring to professor basu will also
+
+50
+00:04:51,839 --> 00:04:54,911
+Talk about the other folks sitting refer to
+
+51
+00:04:55,423 --> 00:04:59,519
+The boxer artificial intelligence a modern approach
+
+52
+00:04:59,775 --> 00:05:01,311
+Second edition by
+
+53
+00:05:01,567 --> 00:05:04,383
+Stuart russell and peter norvig
+
+54
+00:05:04,895 --> 00:05:09,503
+This book is published by pants all and also by pearson
+
+55
+00:05:11,295 --> 00:05:16,159
+The second book is artificial intelligence a new synthesis
+
+56
+00:05:16,415 --> 00:05:18,463
+Vinyls nelson
+
+57
+00:05:18,975 --> 00:05:22,047
+Published by morgan kaufmann publishers
+
+58
+00:05:26,911 --> 00:05:31,007
+Today's lecture will be the first letter in the series
+
+59
+00:05:31,263 --> 00:05:34,079
+The first module for this course is the introduction
+
+60
+00:05:34,847 --> 00:05:40,479
+And today's lecture is the first lesson this module which is introduction to eye
+
+61
+00:05:42,271 --> 00:05:45,855
+Let's come to the objectives of today's lecture
+
+62
+00:05:46,367 --> 00:05:49,695
+Instructional objectives of todays lecherous
+
+63
+00:05:50,207 --> 00:05:50,975
+Daman
+
+64
+00:05:51,231 --> 00:05:57,375
+To understand the definition of artificial intelligence what are artificial intelligence is what is it about
+
+65
+00:05:59,167 --> 00:06:00,447
+Sexually
+
+66
+00:06:00,959 --> 00:06:02,495
+Discussing
+
+67
+00:06:02,751 --> 00:06:07,615
+The different faculties that involve to the telligent behaviour
+
+68
+00:06:08,127 --> 00:06:11,455
+Different components that define intelligence
+
+69
+00:06:12,223 --> 00:06:15,295
+We will also be examining
+
+70
+00:06:15,551 --> 00:06:18,367
+The different ways of approaching
+
+71
+00:06:19,391 --> 00:06:19,903
+And
+
+72
+00:06:20,159 --> 00:06:22,975
+Finally we will also look at
+
+73
+00:06:23,743 --> 00:06:29,887
+Some example systems that have been constructed at a well-known popularly known
+
+74
+00:06:30,911 --> 00:06:32,703
+Which user
+
+75
+00:06:32,959 --> 00:06:33,983
+And lastly
+
+76
+00:06:34,495 --> 00:06:39,615
+We will also take them please look at the history of life
+
+77
+00:06:44,223 --> 00:06:48,831
+On taking this lesson you should become familiar with the different way
+
+78
+00:06:49,087 --> 00:06:54,207
+Ways of defining artificial intelligence as you see different people
+
+79
+00:06:54,719 --> 00:06:57,535
+Define digestion tea and we will
+
+80
+00:06:58,047 --> 00:07:00,863
+Family services with this definition
+
+81
+00:07:01,375 --> 00:07:02,143
+Secondly
+
+82
+00:07:02,911 --> 00:07:08,287
+As i mentioned we try to understand the different components of intelligent behaviour
+
+83
+00:07:09,823 --> 00:07:15,967
+Objective of today's lecturers also to let you develop an appreciation of
+
+84
+00:07:16,223 --> 00:07:19,039
+Scope of artificial intelligence
+
+85
+00:07:19,295 --> 00:07:23,903
+And special actual challenges that are there in the field
+
+86
+00:07:24,927 --> 00:07:26,719
+On clicking on
+
+87
+00:07:27,487 --> 00:07:28,511
+Checking today's
+
+88
+00:07:29,023 --> 00:07:31,839
+Cause you should be able to have a fair idea
+
+89
+00:07:32,095 --> 00:07:33,887
+Of the types of bra
+
+90
+00:07:34,143 --> 00:07:40,287
+Problems that can be current is solved by the computer centre days techniques that without today
+
+91
+00:07:40,543 --> 00:07:45,919
+And we will also have an idea of those problems that is still
+
+92
+00:07:46,431 --> 00:07:52,575
+Difficult or we can not yet solve it by the techniques that we know today
+
+93
+00:07:54,367 --> 00:07:59,999
+Zombies are the four main components of today's lecture
+
+94
+00:08:00,511 --> 00:08:06,655
+Definition of examples of storms approaches to a brief history first
+
+95
+00:08:06,911 --> 00:08:09,727
+Nominal take up the definition of you
+
+96
+00:08:12,799 --> 00:08:18,943
+Now what is artificial intelligence there is too many definitions of the store
+
+97
+00:08:19,199 --> 00:08:20,479
+Floating around
+
+98
+00:08:24,063 --> 00:08:30,207
+Ssc or what is clear from being towards artificial intelligence
+
+99
+00:08:30,463 --> 00:08:36,607
+Ask your p**** that guy is concerned with the design of in
+
+100
+00:08:36,863 --> 00:08:38,143
+Intelligence
+
+101
+00:08:39,167 --> 00:08:42,495
+As the first of artificial
+
+102
+00:08:42,751 --> 00:08:48,895
+Actually concerned with the design of intelligence in artificial artefacts in arctic
+
+103
+00:08:50,943 --> 00:08:57,087
+Usa systems artificial systems are man-made systems and building intelligence
+
+104
+00:08:59,135 --> 00:09:02,719
+The storm was coined by mcafee
+
+105
+00:09:03,231 --> 00:09:09,375
+In 1956 in a famous conference the tasmark conference which we will have a patient
+
+106
+00:09:09,631 --> 00:09:10,655
+Talk about late
+
+107
+00:09:14,239 --> 00:09:16,287
+Now
+
+108
+00:09:17,311 --> 00:09:21,919
+The term artificial a visa to understand but what is intelligence
+
+109
+00:09:22,431 --> 00:09:28,063
+It's very difficult to define intelligence
+
+110
+00:09:29,599 --> 00:09:30,111
+V
+
+111
+00:09:30,367 --> 00:09:33,183
+Look at some people look at intelligence as
+
+112
+00:09:33,695 --> 00:09:36,767
+Something that characterizes humans
+
+113
+00:09:37,023 --> 00:09:43,167
+If you take human beings to be intelligent you can say artificial intelligence
+
+114
+00:09:44,447 --> 00:09:48,543
+Means having behaviour which is like a human
+
+115
+00:09:49,823 --> 00:09:55,199
+In fact there are two schools of thought he assam people
+
+116
+00:09:56,991 --> 00:10:03,135
+Ideas to have a machine or have a system that behaves like a human
+
+117
+00:10:03,903 --> 00:10:06,719
+On the other school of thought is too
+
+118
+00:10:07,487 --> 00:10:11,839
+Humans are not always welcome period
+
+119
+00:10:12,351 --> 00:10:14,143
+Even though human survive
+
+120
+00:10:14,911 --> 00:10:21,055
+Actually present elephant bath tab all the time 2 minutes to not be heaven telogen 3 so
+
+121
+00:10:21,311 --> 00:10:23,103
+School of thought
+
+122
+00:10:23,359 --> 00:10:26,175
+Is that artificial intelligence concerns with
+
+123
+00:10:26,431 --> 00:10:29,247
+Set intelligence which is the ideal audi
+
+124
+00:10:29,503 --> 00:10:32,575
+Best behaviour of the most rational behaviour
+
+125
+00:10:32,831 --> 00:10:35,391
+It is the machine should behave centre
+
+126
+00:10:35,903 --> 00:10:37,439
+Best possible man
+
+127
+00:10:38,463 --> 00:10:44,607
+Charmi the definition when we talk about their behaviour
+
+128
+00:10:44,863 --> 00:10:51,007
+What sort of behavioral talking about there are two main types of behaviour that people will like
+
+129
+00:10:51,263 --> 00:10:55,103
+Talk about number 1 is thinking
+
+130
+00:10:55,359 --> 00:10:56,639
+Thinking intelligence
+
+131
+00:10:57,151 --> 00:11:00,479
+Listen properly and intelligence in order to
+
+132
+00:11:00,735 --> 00:11:02,271
+Stomach weather solutions
+
+133
+00:11:02,527 --> 00:11:04,063
+And the second
+
+134
+00:11:04,575 --> 00:11:05,343
+Approach
+
+135
+00:11:06,623 --> 00:11:10,463
+Talk about not thinking but acting how the system
+
+136
+00:11:10,975 --> 00:11:13,535
+Actually apps apk
+
+137
+00:11:15,327 --> 00:11:16,607
+Service
+
+138
+00:11:17,119 --> 00:11:23,263
+We can talk about intelligence as something that characterizes human or something that means behave
+
+139
+00:11:23,519 --> 00:11:27,615
+The best possible manner of behaving rational
+
+140
+00:11:28,383 --> 00:11:30,687
+Again we can talk about
+
+141
+00:11:30,943 --> 00:11:37,087
+Intelligent intelligence and thought on intelligence in action
+
+142
+00:11:37,343 --> 00:11:41,439
+Based on this criterion we can
+
+143
+00:11:41,695 --> 00:11:47,839
+Look at the different ways of defining so we may look at thought process
+
+144
+00:11:48,095 --> 00:11:54,239
+Process behaviour women look at human live performance
+
+145
+00:11:54,495 --> 00:11:56,799
+Pisces ideal rational performance
+
+146
+00:11:57,567 --> 00:12:00,127
+And this app
+
+147
+00:12:00,383 --> 00:12:06,527
+Shows the four different
+
+148
+00:12:06,783 --> 00:12:08,575
+Definition set image
+
+149
+00:12:08,831 --> 00:12:10,367
+Zombies 2 dark thomas
+
+150
+00:12:12,159 --> 00:12:15,487
+So on the one hand we have
+
+151
+00:12:16,255 --> 00:12:22,399
+Thotta reasoning vs behaviour on the other hand we have human like performance vs ideal proforma
+
+152
+00:12:23,679 --> 00:12:29,567
+Software systems that think like humans
+
+153
+00:12:30,847 --> 00:12:32,383
+For example
+
+154
+00:12:32,639 --> 00:12:34,943
+Vvs cars
+
+155
+00:12:35,199 --> 00:12:38,783
+The famous turing test which is device by alan turing
+
+156
+00:12:40,319 --> 00:12:41,599
+Weather
+
+157
+00:12:42,111 --> 00:12:46,975
+Assistant pastor turing test would be a system that
+
+158
+00:12:47,231 --> 00:12:50,303
+Besides like a human of things like a human
+
+159
+00:12:52,095 --> 00:12:56,447
+The second definition is systems that think rationally
+
+160
+00:12:57,983 --> 00:12:59,775
+The
+
+161
+00:13:00,543 --> 00:13:02,591
+School of thoughts there
+
+162
+00:13:03,359 --> 00:13:04,895
+Justin papers
+
+163
+00:13:05,663 --> 00:13:10,527
+Mathematician cen computer scientists have worked on logic
+
+164
+00:13:10,783 --> 00:13:12,575
+Laws of thought
+
+165
+00:13:12,831 --> 00:13:14,367
+Police interceptor watch
+
+166
+00:13:16,671 --> 00:13:19,999
+Tera systems that act like humans
+
+167
+00:13:22,559 --> 00:13:25,375
+Causes of scientists look at
+
+168
+00:13:28,191 --> 00:13:29,983
+The properties of systems
+
+169
+00:13:30,751 --> 00:13:36,895
+That act like humans and finally we have the definition systems that
+
+170
+00:13:37,151 --> 00:13:43,295
+Jacs vaishnavi or systems that act in the best possible manner
+
+171
+00:13:44,319 --> 00:13:48,671
+And for this we have other approaches
+
+172
+00:13:49,695 --> 00:13:53,535
+Constructing a rational agent and agency tax classes
+
+173
+00:13:55,327 --> 00:13:59,935
+Alan turing considered by many to be the father of uae
+
+174
+00:14:01,727 --> 00:14:04,799
+Define the turing test
+
+175
+00:14:05,311 --> 00:14:08,895
+In the turing test
+
+176
+00:14:09,151 --> 00:14:11,967
+This is experimental setup better device
+
+177
+00:14:12,479 --> 00:14:17,343
+Set up a closed room in this closed room there will be
+
+178
+00:14:17,599 --> 00:14:19,391
+Abhi which
+
+179
+00:14:19,647 --> 00:14:21,183
+Maybe a computer
+
+180
+00:14:21,439 --> 00:14:23,743
+And it may be a human
+
+181
+00:14:25,535 --> 00:14:27,327
+Tenzin inter locator
+
+182
+00:14:28,351 --> 00:14:29,887
+Outside
+
+183
+00:14:30,655 --> 00:14:32,191
+The room
+
+184
+00:14:32,447 --> 00:14:33,727
+Century theatre
+
+185
+00:14:33,983 --> 00:14:35,263
+Does not know
+
+186
+00:14:35,519 --> 00:14:41,663
+Weather the being inside the room is a computer and human so what i do
+
+187
+00:14:41,919 --> 00:14:43,199
+Status
+
+188
+00:14:43,455 --> 00:14:44,223
+Is that
+
+189
+00:14:45,247 --> 00:14:47,039
+Ask
+
+190
+00:14:47,295 --> 00:14:48,063
+Questions
+
+191
+00:14:49,599 --> 00:14:53,951
+And the human being inside the room
+
+192
+00:14:56,767 --> 00:14:58,559
+Processes this question
+
+193
+00:14:58,815 --> 00:15:01,119
+Aj returns up answer
+
+194
+00:15:01,887 --> 00:15:07,519
+At the interview getters on the left room to receive the answers on the screen
+
+195
+00:15:09,311 --> 00:15:15,455
+Now this has to make out from the answers whether the being inside the room
+
+196
+00:15:15,711 --> 00:15:19,295
+Whether it is a computer on human
+
+197
+00:15:19,551 --> 00:15:24,671
+Now it is a computer inside the room the computer tries to
+
+198
+00:15:26,975 --> 00:15:29,279
+Xx together that it
+
+199
+00:15:29,535 --> 00:15:34,143
+Actually i human being in the way the answers to the questions
+
+200
+00:15:35,423 --> 00:15:40,287
+Abbots itasca battery located to decide who is human
+
+201
+00:15:41,055 --> 00:15:47,199
+So this is a schematic diagram showing test suite in integrated sitting infront the terminal this is a valve
+
+202
+00:15:47,455 --> 00:15:53,599
+The world may contain ida human on computer and they together has to decide
+
+203
+00:15:53,855 --> 00:15:57,439
+Weather what is inside the computer or a human being
+
+204
+00:15:58,207 --> 00:15:59,999
+Now
+
+205
+00:16:00,767 --> 00:16:05,887
+Ace ventura kichak and not reliably distinguish
+
+206
+00:16:06,399 --> 00:16:07,679
+Between
+
+207
+00:16:08,191 --> 00:16:11,775
+Acumen answerer and the computer dancers
+
+208
+00:16:12,031 --> 00:16:14,591
+Then we can save the computer system
+
+209
+00:16:16,127 --> 00:16:18,943
+Artificial intelligence
+
+210
+00:16:19,199 --> 00:16:23,295
+This is a test device for children
+
+211
+00:16:23,551 --> 00:16:27,903
+To find out whether the machine has
+
+212
+00:16:28,159 --> 00:16:34,303
+Unable to come up with the right amount of intelligence to match human
+
+213
+00:16:34,559 --> 00:16:37,119
+Answering questions
+
+214
+00:16:39,935 --> 00:16:42,751
+Now let's look at
+
+215
+00:16:43,519 --> 00:16:46,079
+Typical guy problems
+
+216
+00:16:48,895 --> 00:16:55,039
+Information and cities are agents the need to be able to do different types of tasks such
+
+217
+00:16:55,295 --> 00:17:01,439
+Task switcher mundane tasks that we do it another matter of fact in our daily life
+
+218
+00:17:01,695 --> 00:17:05,791
+There are some tasks that we consider intelligent
+
+219
+00:17:06,047 --> 00:17:09,887
+Like solving but the stupid mathematical problems
+
+220
+00:17:10,143 --> 00:17:16,287
+Playing games of chess in an expert fashion show an activity
+
+221
+00:17:16,543 --> 00:17:19,615
+Intelligent people can do well
+
+222
+00:17:23,199 --> 00:17:28,063
+Examples of mundane tasks are planning route
+
+223
+00:17:28,319 --> 00:17:34,207
+I want to go from here to the market and you plan apart along with you will go
+
+224
+00:17:34,463 --> 00:17:40,607
+Are you want to go from here to let us a particular place in
+
+225
+00:17:40,863 --> 00:17:46,495
+Delhi and you have to plan your journey and plan your park
+
+226
+00:17:46,751 --> 00:17:48,031
+Then
+
+227
+00:17:48,287 --> 00:17:49,567
+Suppose
+
+228
+00:17:50,847 --> 00:17:56,991
+Something that we do all the time is right recognise objects recognise faces of people
+
+229
+00:17:58,015 --> 00:17:59,807
+Ssc question
+
+230
+00:18:00,063 --> 00:18:04,671
+Thirdly we communicate with each other
+
+231
+00:18:05,183 --> 00:18:06,719
+Natural language
+
+232
+00:18:07,231 --> 00:18:11,839
+Shortly navigate around obstacles in the street
+
+233
+00:18:12,095 --> 00:18:18,239
+Subway surfers tasks that we do routinely in fact post animals today's tasks routine
+
+234
+00:18:18,495 --> 00:18:21,311
+And then there expect us
+
+235
+00:18:21,823 --> 00:18:27,967
+Flight medical diagnosis which i need a doctor with an expert in the field of mathematics
+
+236
+00:18:28,223 --> 00:18:29,759
+Problem solving
+
+237
+00:18:30,015 --> 00:18:30,527
+Which
+
+238
+00:18:31,039 --> 00:18:32,319
+De dana factory
+
+239
+00:18:32,575 --> 00:18:35,135
+Only by mathematician
+
+240
+00:18:36,927 --> 00:18:40,255
+Which of these problems are using
+
+241
+00:18:40,511 --> 00:18:44,095
+Which of these problems are hard
+
+242
+00:18:45,887 --> 00:18:50,751
+Surprisingly it has been much easier to make a nice
+
+243
+00:18:51,263 --> 00:18:57,407
+Many of the high-level task with so called experts as it has been
+
+244
+00:18:57,663 --> 00:19:03,295
+Affair in the history of ai in the history of computers it has been easier
+
+245
+00:19:05,087 --> 00:19:06,111
+Sol
+
+246
+00:19:06,367 --> 00:19:07,391
+Problems
+
+247
+00:19:07,647 --> 00:19:08,159
+Which
+
+248
+00:19:08,671 --> 00:19:13,023
+Really the domain of exports party i have not had
+
+249
+00:19:13,791 --> 00:19:17,887
+The same amount of success in dealing with munde in town
+
+250
+00:19:21,215 --> 00:19:24,031
+For example i systems
+
+251
+00:19:24,799 --> 00:19:27,103
+10 years later symbolic integration
+
+252
+00:19:27,359 --> 00:19:29,151
+Some of the systems can do
+
+253
+00:19:29,663 --> 00:19:31,455
+Can prove some theorems
+
+254
+00:19:31,711 --> 00:19:35,039
+I just install pages quite well
+
+255
+00:19:35,807 --> 00:19:39,647
+Cheresources medical diagnosis in particular domain
+
+256
+00:19:41,695 --> 00:19:42,975
+However
+
+257
+00:19:43,231 --> 00:19:49,375
+Achievements of animals to fight effortlessly for example walking around without
+
+258
+00:19:49,631 --> 00:19:51,423
+Running into things
+
+259
+00:19:51,679 --> 00:19:55,263
+Catching prey and avoiding predators
+
+260
+00:19:55,775 --> 00:19:58,847
+Enterprising complex sensory information
+
+261
+00:19:59,359 --> 00:20:05,503
+Modelling return of staple animals scientist and what they are thinking about her son
+
+262
+00:20:05,759 --> 00:20:08,063
+How to plan what to say and so on
+
+263
+00:20:09,599 --> 00:20:13,183
+Also working as a team are collaborating
+
+264
+00:20:14,719 --> 00:20:15,231
+Then
+
+265
+00:20:17,279 --> 00:20:21,887
+Vistas unfortunately have not all been easy
+
+266
+00:20:22,143 --> 00:20:23,935
+Stupid machine
+
+267
+00:20:24,191 --> 00:20:26,751
+Let's look at some of the apes
+
+268
+00:20:27,263 --> 00:20:30,847
+Basic component elegent behaviour in human beings
+
+269
+00:20:31,615 --> 00:20:35,455
+Perception that is able letter to see here
+
+270
+00:20:36,223 --> 00:20:37,759
+Sensory information
+
+271
+00:20:38,527 --> 00:20:41,599
+Reasoning reasoning with the information that we have
+
+272
+00:20:42,111 --> 00:20:44,927
+Learning learning for new situations
+
+273
+00:20:45,183 --> 00:20:49,279
+Understanding that your language communicating in natural language
+
+274
+00:20:50,047 --> 00:20:51,839
+Solving problems
+
+275
+00:20:54,655 --> 00:20:58,239
+Now we have looked after so
+
+276
+00:20:58,751 --> 00:21:04,895
+Is a things are what is perception reasoning learning language and the standard solved problems
+
+277
+00:21:05,151 --> 00:21:08,991
+Examples of some of the things that we want
+
+278
+00:21:09,503 --> 00:21:11,039
+Austin swift
+
+279
+00:21:11,807 --> 00:21:17,952
+Now starts free have her looked at the death
+
+280
+00:21:18,208 --> 00:21:19,488
+Definition of ai
+
+281
+00:21:20,256 --> 00:21:21,280
+Let's search
+
+282
+00:21:22,048 --> 00:21:26,912
+Look at have a look at some examples a system that has been around
+
+283
+00:21:29,984 --> 00:21:34,592
+Applications of computer vision
+
+284
+00:21:35,104 --> 00:21:38,688
+Image recognition including face recognition
+
+285
+00:21:39,200 --> 00:21:40,480
+Robotics
+
+286
+00:21:40,992 --> 00:21:44,576
+Natural language processing and natural language understanding
+
+287
+00:21:45,088 --> 00:21:46,368
+Speech processing
+
+288
+00:21:48,416 --> 00:21:54,560
+If you look at the practical impact of ai ai
+
+289
+00:21:54,816 --> 00:21:58,912
+Why components are embedded in numerous devices
+
+290
+00:21:59,168 --> 00:22:03,264
+Even and some coffee machines there a component embedded
+
+291
+00:22:04,032 --> 00:22:08,384
+Assistance island city used in detecting
+
+292
+00:22:08,640 --> 00:22:10,176
+Credit card fraud
+
+293
+00:22:10,944 --> 00:22:12,992
+In configuring products
+
+294
+00:22:13,760 --> 00:22:14,784
+Ina
+
+295
+00:22:15,040 --> 00:22:19,136
+Complex planning tasks in advising suggestions
+
+296
+00:22:20,672 --> 00:22:23,232
+Intelligent tutoring systems pro
+
+297
+00:22:23,488 --> 00:22:26,560
+Provide students with personalized attention
+
+298
+00:22:27,584 --> 00:22:30,400
+This systems are there
+
+299
+00:22:30,912 --> 00:22:31,936
+Used
+
+300
+00:22:34,240 --> 00:22:36,032
+They have a tremendous impact
+
+301
+00:22:44,224 --> 00:22:46,272
+Jashn album
+
+302
+00:22:46,528 --> 00:22:52,672
+Which stands for autonomous land vehicle in a neural network
+
+303
+00:22:52,928 --> 00:22:54,464
+It was
+
+304
+00:22:54,976 --> 00:23:01,120
+Conceived was designed in 1989 by 18 formal live at carnegie mellon
+
+305
+00:23:01,376 --> 00:23:02,656
+University
+
+306
+00:23:05,728 --> 00:23:07,520
+Jo baka
+
+307
+00:23:08,288 --> 00:23:13,664
+The east coast to the west coast cross united states of america
+
+308
+00:23:15,712 --> 00:23:17,248
+Using computer control
+
+309
+00:23:17,504 --> 00:23:20,832
+And it was completely autonomously
+
+310
+00:23:21,088 --> 00:23:25,696
+For most of the 2850 miles
+
+311
+00:23:26,720 --> 00:23:29,280
+Only 50 miles
+
+312
+00:23:29,536 --> 00:23:32,096
+Special hairstyles
+
+313
+00:23:32,864 --> 00:23:39,008
+Exits to see whether central human driver to charge
+
+314
+00:23:39,776 --> 00:23:41,312
+2800
+
+315
+00:23:41,568 --> 00:23:44,384
+Smile tech auto sales
+
+316
+00:23:45,664 --> 00:23:48,736
+And i just had a car despite simple
+
+317
+00:23:49,504 --> 00:23:51,808
+In front of the camera
+
+318
+00:23:52,064 --> 00:23:55,392
+Which takes a picture of the road in front
+
+319
+00:23:55,648 --> 00:23:58,464
+And this picture of this image
+
+320
+00:23:58,976 --> 00:24:01,280
+Used in a neural network
+
+321
+00:24:04,096 --> 00:24:10,240
+This picture is captured into a image having 30 by 32
+
+322
+00:24:12,032 --> 00:24:13,056
+Pixels
+
+323
+00:24:14,080 --> 00:24:18,176
+Exercise schedule that has four fingers
+
+324
+00:24:19,456 --> 00:24:21,760
+And the output
+
+325
+00:24:23,296 --> 00:24:24,320
+Thomas to the
+
+326
+00:24:25,088 --> 00:24:27,392
+Output tells the computer
+
+327
+00:24:27,648 --> 00:24:28,672
+The processor
+
+328
+00:24:29,440 --> 00:24:30,976
+Which way 2 torrent
+
+329
+00:24:31,232 --> 00:24:33,280
+Nail art
+
+330
+00:24:33,536 --> 00:24:35,840
+Decide the speed and salon
+
+331
+00:24:39,424 --> 00:24:44,288
+In 1997 the deep blue chess program
+
+332
+00:24:44,544 --> 00:24:46,592
+Left at ibm
+
+333
+00:24:47,104 --> 00:24:47,872
+Beach
+
+334
+00:24:48,128 --> 00:24:53,504
+The current world chess champion carry kasparov
+
+335
+00:24:54,272 --> 00:24:56,832
+This is a computer deep blue
+
+336
+00:24:58,368 --> 00:25:02,208
+And this is tarah kasparov actress re after he lost the match
+
+337
+00:25:07,584 --> 00:25:09,376
+In machine translation
+
+338
+00:25:11,936 --> 00:25:15,264
+If you could have immediate translations between
+
+339
+00:25:15,520 --> 00:25:21,152
+Peoples speaking different languages that would be a remarkable feet and it has
+
+340
+00:25:21,408 --> 00:25:23,712
+Very white lens in economics
+
+341
+00:25:24,224 --> 00:25:26,528
+Cultural integration
+
+342
+00:25:27,296 --> 00:25:28,320
+Double today
+
+343
+00:25:28,576 --> 00:25:34,720
+Tera people speaking so many different languages and we do not understand the languages of many other
+
+344
+00:25:37,536 --> 00:25:41,632
+As you know there are so many languages the modern xx
+
+345
+00:25:42,400 --> 00:25:45,216
+Official languages and their
+
+346
+00:25:47,008 --> 00:25:49,568
+I cannot understand the language of
+
+347
+00:25:49,824 --> 00:25:55,968
+So wouldn't it be nice if i we had a system which would do simultaneous machine brazil
+
+348
+00:25:56,224 --> 00:25:59,552
+So that we can definitely understand each other
+
+349
+00:26:06,720 --> 00:26:08,512
+Full machine translation
+
+350
+00:26:08,768 --> 00:26:12,864
+Is not yet there but where are you
+
+351
+00:26:13,120 --> 00:26:14,656
+They have been quite
+
+352
+00:26:15,168 --> 00:26:17,984
+Some progress in the field of machine translation
+
+353
+00:26:18,240 --> 00:26:24,384
+Small way for example the us military is giving a simpler one wait
+
+354
+00:26:24,640 --> 00:26:26,176
+Translation device
+
+355
+00:26:27,968 --> 00:26:29,760
+The using this in iraq
+
+356
+00:26:30,016 --> 00:26:36,160
+Just before suicide using the phrase letter to communicate with insured iraqi prisoners
+
+357
+00:26:36,416 --> 00:26:41,280
+Software for travellers cheque points and for other peace keeping cutie
+
+358
+00:26:43,584 --> 00:26:46,400
+University is working
+
+359
+00:26:46,656 --> 00:26:48,704
+System call the speech letter for
+
+360
+00:26:48,960 --> 00:26:51,776
+Used in talk to patient interview
+
+361
+00:26:52,032 --> 00:26:58,176
+Imagine how to recruit it is when a doctor does not understand the language of the patience to the patient and kind
+
+362
+00:26:58,432 --> 00:27:03,040
+Install the language of the doctor the patient will not be able to communicate his symptoms to the doctor
+
+363
+00:27:04,064 --> 00:27:08,928
+So that is being used in order to help doctors tools
+
+364
+00:27:10,208 --> 00:27:15,328
+In space exploration robotics space probes
+
+365
+00:27:16,352 --> 00:27:19,168
+Astronomer sleep monitor their surroundings
+
+366
+00:27:19,936 --> 00:27:21,472
+Make decisions
+
+367
+00:27:21,728 --> 00:27:22,752
+Act
+
+368
+00:27:23,008 --> 00:27:24,800
+Achieve their bones
+
+369
+00:27:27,872 --> 00:27:31,200
+Hotstar home page
+
+370
+00:27:31,456 --> 00:27:33,760
+Of mars exploration
+
+371
+00:27:34,016 --> 00:27:35,040
+Formation
+
+372
+00:27:38,368 --> 00:27:40,416
+Sudha
+
+373
+00:27:41,184 --> 00:27:43,232
+Mansarovar
+
+374
+00:27:47,072 --> 00:27:47,840
+So
+
+375
+00:27:49,888 --> 00:27:51,936
+We have a look at this page
+
+376
+00:27:53,216 --> 00:27:56,544
+Posted by jet propulsion laboratory
+
+377
+00:27:57,824 --> 00:27:59,104
+This page
+
+378
+00:27:59,360 --> 00:28:00,640
+Trustline
+
+379
+00:28:01,664 --> 00:28:04,992
+The exploration that have been started on
+
+380
+00:28:05,248 --> 00:28:07,040
+By the mars rover
+
+381
+00:28:07,552 --> 00:28:11,392
+Ketu mars rovers spirit and opportunity
+
+382
+00:28:11,648 --> 00:28:13,184
+That has been sent to
+
+383
+00:28:14,720 --> 00:28:18,048
+I have already finished the primary assignments
+
+384
+00:28:19,328 --> 00:28:22,912
+Are continuing with the exploratory duties
+
+385
+00:28:24,448 --> 00:28:29,056
+So bees to pages contain updates of spirits
+
+386
+00:28:29,568 --> 00:28:32,896
+And this page contains the update of opportunity
+
+387
+00:28:33,664 --> 00:28:34,432
+Examples
+
+388
+00:28:34,944 --> 00:28:36,480
+Sex movies for you
+
+389
+00:28:39,296 --> 00:28:41,856
+Nx of some spirit update
+
+390
+00:28:42,880 --> 00:28:44,160
+Surat
+
+391
+00:28:44,416 --> 00:28:47,744
+Spirit spent the last few songs
+
+392
+00:28:48,000 --> 00:28:49,280
+Investigating for
+
+393
+00:28:49,536 --> 00:28:55,168
+Us cold including a successful crying to the rock abrasion to that is water actors
+
+394
+00:28:55,424 --> 00:28:59,008
+What is a rock abrasion tools robot spirit is doing
+
+395
+00:28:59,520 --> 00:29:05,152
+Is using her or compression tool and getting samples of rocks from the surface of mars
+
+396
+00:29:05,920 --> 00:29:10,784
+I'm trying to find out what chemicals are present in the rock
+
+397
+00:29:11,040 --> 00:29:13,344
+Objectives of this mission
+
+398
+00:29:14,112 --> 00:29:17,952
+Is to find out whether there is water in mars
+
+399
+00:29:18,208 --> 00:29:19,232
+X factor
+
+400
+00:29:19,744 --> 00:29:23,584
+Mars rovers have been able to trace the presence of water
+
+401
+00:29:23,840 --> 00:29:25,632
+Rock sample singers
+
+402
+00:29:27,424 --> 00:29:30,240
+The opportunity is going from virginia to london
+
+403
+00:29:30,496 --> 00:29:34,336
+Two different locations to find on the bus service
+
+404
+00:29:35,360 --> 00:29:37,664
+And opportunities currently in
+
+405
+00:29:37,920 --> 00:29:43,808
+Critical endurance creator and to the breathing and examining rocks
+
+406
+00:29:47,648 --> 00:29:53,792
+This image shows the area inside endurance crater that opportunity has been exam
+
+407
+00:29:54,048 --> 00:29:54,560
+Summoning
+
+408
+00:29:55,584 --> 00:30:01,472
+The roofer is investigating the distinct layers of rock that make up the srijan
+
+409
+00:30:06,848 --> 00:30:08,384
+I'm just image
+
+410
+00:30:08,896 --> 00:30:11,200
+Taken by robert highlights
+
+411
+00:30:11,456 --> 00:30:17,600
+The not used anna gets that covered the rock that has been named the pot of gold
+
+412
+00:30:18,368 --> 00:30:22,464
+Plants appear to stand up and up stock like features
+
+413
+00:30:23,232 --> 00:30:26,816
+Sources of the rock is dotted with fine scale pits
+
+414
+00:30:31,424 --> 00:30:33,984
+So many other news about
+
+415
+00:30:34,496 --> 00:30:35,264
+Tiesto
+
+416
+00:30:37,056 --> 00:30:38,592
+Space rovers
+
+417
+00:30:42,688 --> 00:30:48,832
+The spirit rover this current exploring a range of motion hills that took 2 months to reach
+
+418
+00:30:49,344 --> 00:30:55,488
+It is finding curiously eroded rocks that maybe new pieces to the puzzle of the regents park
+
+419
+00:30:56,768 --> 00:31:02,912
+Spirits 2 in opportunity is also negotiating slope ground examining exposed rock
+
+420
+00:31:03,168 --> 00:31:04,960
+Players inside a creator
+
+421
+00:31:05,472 --> 00:31:07,520
+Informally maintain torrents
+
+422
+00:31:07,776 --> 00:31:09,056
+Puc
+
+423
+00:31:09,312 --> 00:31:11,872
+That we have intelligent agents
+
+424
+00:31:12,384 --> 00:31:14,432
+Starks are going to
+
+425
+00:31:14,944 --> 00:31:16,224
+Unknown territory
+
+426
+00:31:16,480 --> 00:31:21,088
+Can human has been before and they are carrying on exploration
+
+427
+00:31:21,344 --> 00:31:23,392
+And making you and fences
+
+428
+00:31:27,488 --> 00:31:29,024
+Internet
+
+429
+00:31:31,072 --> 00:31:35,424
+All of you are familiar with explosive growth of internet in recent years
+
+430
+00:31:36,448 --> 00:31:39,776
+And there is a growing interest in internet agents
+
+431
+00:31:40,032 --> 00:31:42,592
+Aajkal monitors uses task
+
+432
+00:31:43,104 --> 00:31:45,920
+Seek information that is needed
+
+433
+00:31:46,944 --> 00:31:47,712
+The web
+
+434
+00:31:48,480 --> 00:31:53,600
+Ireland which information is most useful for particular user
+
+435
+00:31:58,720 --> 00:32:02,048
+Now that we have her looks at
+
+436
+00:32:03,328 --> 00:32:04,608
+Differences
+
+437
+00:32:05,632 --> 00:32:08,960
+Example systems that use artificial intelligence
+
+438
+00:32:09,984 --> 00:32:12,800
+Look at some approaches
+
+439
+00:32:15,360 --> 00:32:18,176
+Handsome approaches to solve signatures
+
+440
+00:32:26,624 --> 00:32:31,232
+One way of looking at a strong ios week
+
+441
+00:32:32,256 --> 00:32:38,400
+Song to build machines that can truly reason and solve problems
+
+442
+00:32:39,680 --> 00:32:42,240
+Machines that are self aware
+
+443
+00:32:43,008 --> 00:32:46,336
+Schools offer on intellectual ability
+
+444
+00:32:47,360 --> 00:32:51,712
+Is indistinguishable from that of a human being
+
+445
+00:32:52,224 --> 00:32:54,528
+So strong i proponents
+
+446
+00:32:57,088 --> 00:33:00,416
+Want to develop systems that are completely intelligent
+
+447
+00:33:01,952 --> 00:33:03,488
+Dhadkan 2
+
+448
+00:33:04,000 --> 00:33:04,512
+Thanks
+
+449
+00:33:04,768 --> 00:33:07,584
+Full name using the internet
+
+450
+00:33:08,096 --> 00:33:10,400
+Substance can be human life
+
+451
+00:33:11,168 --> 00:33:13,728
+Can been on human life but sasha
+
+452
+00:33:18,592 --> 00:33:23,968
+When i was first conceived in the 1950 the 1960 there was a
+
+453
+00:33:24,224 --> 00:33:26,528
+Optimism about
+
+454
+00:33:27,808 --> 00:33:29,344
+And there was a prediction
+
+455
+00:33:29,600 --> 00:33:30,368
+That
+
+456
+00:33:31,136 --> 00:33:31,904
+Very soon
+
+457
+00:33:32,672 --> 00:33:34,720
+Assistance to be able to
+
+458
+00:33:35,744 --> 00:33:36,768
+Check
+
+459
+00:33:37,024 --> 00:33:41,376
+Humans and able to do everything that a human can do
+
+460
+00:33:41,888 --> 00:33:42,400
+And
+
+461
+00:33:42,656 --> 00:33:47,776
+Can do them much better and the tasks that humans cannot do within a short time
+
+462
+00:33:48,800 --> 00:33:50,592
+Optimism
+
+463
+00:33:51,872 --> 00:33:53,152
+Arsenal founded
+
+464
+00:33:53,664 --> 00:33:58,016
+And this was partly the reason why some people lost faith
+
+465
+00:33:58,528 --> 00:34:00,320
+In the techniques of ya
+
+466
+00:34:02,880 --> 00:34:03,648
+But
+
+467
+00:34:04,160 --> 00:34:05,440
+After
+
+468
+00:34:05,952 --> 00:34:08,256
+Research in tree house
+
+469
+00:34:08,768 --> 00:34:12,864
+Take a pic taken place for over 50 years
+
+470
+00:34:13,120 --> 00:34:15,168
+Now we are in a position
+
+471
+00:34:15,680 --> 00:34:21,824
+To understand and appreciate the true difficulty of the different problems that i face
+
+472
+00:34:23,360 --> 00:34:24,128
+And
+
+473
+00:34:24,384 --> 00:34:25,664
+You know what
+
+474
+00:34:26,176 --> 00:34:27,712
+Vitamin to solve
+
+475
+00:34:28,992 --> 00:34:29,504
+Now
+
+476
+00:34:29,760 --> 00:34:31,296
+Hand watches motorcycles
+
+477
+00:34:31,552 --> 00:34:33,088
+Alternator
+
+478
+00:34:33,856 --> 00:34:34,624
+Smart shop
+
+479
+00:34:35,392 --> 00:34:39,232
+Mera different techniques and different hardware
+
+480
+00:34:39,744 --> 00:34:42,560
+Different paradigms to be able stop
+
+481
+00:34:45,632 --> 00:34:48,448
+Which i unlike strong
+
+482
+00:34:48,704 --> 00:34:51,264
+Wpi tools with the creation
+
+483
+00:34:51,520 --> 00:34:53,824
+Artificial intelligence
+
+484
+00:34:54,848 --> 00:35:00,224
+That cannot truly reason unsolved problems but after 50 minutes
+
+485
+00:35:06,624 --> 00:35:10,208
+The proposals of vk i claim that
+
+486
+00:35:10,464 --> 00:35:13,280
+Machine setup in suitably programs
+
+487
+00:35:14,048 --> 00:35:14,816
+Can
+
+488
+00:35:15,072 --> 00:35:16,864
+Letterman corporation
+
+489
+00:35:17,120 --> 00:35:21,472
+Appear to be behave intelligency appear to be to task
+
+490
+00:35:21,984 --> 00:35:23,776
+Well and intelligence e
+
+491
+00:35:24,288 --> 00:35:26,592
+Without having the same
+
+492
+00:35:26,848 --> 00:35:30,688
+Intelligence understanding as humans possess
+
+493
+00:35:36,576 --> 00:35:40,928
+So strong and i really deals with machines that really have
+
+494
+00:35:41,440 --> 00:35:45,280
+Mental states that increase and understand the behaviour
+
+495
+00:35:46,048 --> 00:35:48,096
+Why is involved in
+
+496
+00:35:48,352 --> 00:35:49,376
+Simulating you
+
+497
+00:35:49,632 --> 00:35:52,704
+Human behaviour of simulating intelligent behaviour
+
+498
+00:35:53,216 --> 00:35:58,080
+Claiming that the reasoning process behind it is intelligent
+
+499
+00:36:00,128 --> 00:36:04,736
+Apply toward the goal of the plant is to produce
+
+500
+00:36:05,248 --> 00:36:07,808
+Commercially viable smart systems
+
+501
+00:36:08,320 --> 00:36:09,344
+Examples
+
+502
+00:36:10,624 --> 00:36:16,256
+I should be nice to have a security system that is able to recognise the faces of people
+
+503
+00:36:16,512 --> 00:36:19,328
+Who are permitted to enter a particular building
+
+504
+00:36:21,376 --> 00:36:26,752
+So there are some applications such as useful to us and a pleasure
+
+505
+00:36:27,008 --> 00:36:30,336
+Aiims two sources applications in telugu
+
+506
+00:36:31,360 --> 00:36:33,152
+Not necessary to
+
+507
+00:36:33,920 --> 00:36:36,480
+Construct the complete intelligent
+
+508
+00:36:36,736 --> 00:36:37,248
+Agent
+
+509
+00:36:38,016 --> 00:36:41,856
+Switch is intelligent in doing a specific task
+
+510
+00:36:44,160 --> 00:36:45,440
+Recognise people
+
+511
+00:36:47,232 --> 00:36:49,024
+Text credit card fraud
+
+512
+00:36:50,304 --> 00:36:51,840
+Vivek rathi
+
+513
+00:36:52,096 --> 00:36:56,960
+Should i take a specific task and develop systems that solve poster
+
+514
+00:36:59,776 --> 00:37:00,544
+Shortly
+
+515
+00:37:01,056 --> 00:37:02,336
+Cognitive
+
+516
+00:37:03,872 --> 00:37:04,640
+Deals with
+
+517
+00:37:07,200 --> 00:37:13,344
+The study as computers are used to test theories about how does human mind works
+
+518
+00:37:14,624 --> 00:37:16,160
+Scientist
+
+519
+00:37:17,184 --> 00:37:20,256
+Want to understand how humans
+
+520
+00:37:20,512 --> 00:37:23,328
+How humans behave how humans print
+
+521
+00:37:24,608 --> 00:37:25,376
+And
+
+522
+00:37:27,936 --> 00:37:29,216
+Can be tested
+
+523
+00:37:29,472 --> 00:37:29,984
+Buy
+
+524
+00:37:31,520 --> 00:37:33,824
+Sony centre machines
+
+525
+00:37:35,104 --> 00:37:36,128
+Watching
+
+526
+00:37:36,640 --> 00:37:37,408
+And
+
+527
+00:37:37,920 --> 00:37:39,712
+Testing how well the
+
+528
+00:37:39,968 --> 00:37:40,736
+Machine
+
+529
+00:37:41,760 --> 00:37:43,808
+Function using jquery
+
+530
+00:37:45,344 --> 00:37:46,368
+Examples
+
+531
+00:37:47,136 --> 00:37:51,232
+One may have a theory about how humans recognise faces
+
+532
+00:37:51,488 --> 00:37:57,632
+You know how we recognise faces of recognise faces how is store all the different way
+
+533
+00:37:57,888 --> 00:38:03,008
+Cases are some of the many different faces that we have seen in a lifetime and how we
+
+534
+00:38:03,264 --> 00:38:05,056
+Locate a person under custom
+
+535
+00:38:06,080 --> 00:38:09,408
+Find the sum of the different theories
+
+536
+00:38:09,664 --> 00:38:11,968
+About how people recognise faces
+
+537
+00:38:13,248 --> 00:38:16,320
+Peoples false different types of problems
+
+538
+00:38:16,576 --> 00:38:19,648
+And some of these theories can be tested by
+
+539
+00:38:19,904 --> 00:38:22,464
+Building seminar mechanism sanje machine
+
+540
+00:38:22,720 --> 00:38:25,280
+Testing how well the machine full form
+
+541
+00:38:28,864 --> 00:38:32,960
+I have outlined some of the topics of ai
+
+542
+00:38:34,496 --> 00:38:36,032
+The core areas
+
+543
+00:38:36,800 --> 00:38:39,616
+Talked about knowledge representation
+
+544
+00:38:40,896 --> 00:38:41,920
+Reasoning
+
+545
+00:38:42,176 --> 00:38:43,200
+Machine learning
+
+546
+00:38:45,760 --> 00:38:47,296
+General items
+
+547
+00:38:47,808 --> 00:38:48,576
+Search
+
+548
+00:38:49,344 --> 00:38:50,112
+Planning
+
+549
+00:38:50,624 --> 00:38:52,160
+Constraint satisfaction
+
+550
+00:38:53,696 --> 00:38:54,720
+Perception
+
+551
+00:38:55,232 --> 00:38:56,000
+Vision
+
+552
+00:38:56,512 --> 00:38:58,560
+Natural language processing
+
+553
+00:38:59,840 --> 00:39:00,864
+Robotics
+
+554
+00:39:01,888 --> 00:39:03,424
+Application
+
+555
+00:39:03,680 --> 00:39:04,704
+Game playing
+
+556
+00:39:05,472 --> 00:39:07,008
+Education
+
+557
+00:39:08,032 --> 00:39:09,824
+Distributed agent
+
+558
+00:39:10,592 --> 00:39:11,872
+Uncertainty
+
+559
+00:39:12,128 --> 00:39:13,920
+Ballistic approaches
+
+560
+00:39:14,944 --> 00:39:15,968
+Decision theory
+
+561
+00:39:16,480 --> 00:39:18,016
+Reasoning with symbolic
+
+562
+00:39:18,272 --> 00:39:21,600
+Some of the topics that people
+
+563
+00:39:22,368 --> 00:39:23,904
+Study india
+
+564
+00:39:24,416 --> 00:39:25,952
+And the scores
+
+565
+00:39:26,208 --> 00:39:29,280
+Also we are going to study some of this topic
+
+566
+00:39:30,048 --> 00:39:31,072
+Most of this topic
+
+567
+00:39:41,312 --> 00:39:47,456
+Today's successful ai systems operate in well defined specific domain
+
+568
+00:39:48,224 --> 00:39:49,248
+Employee
+
+569
+00:39:49,504 --> 00:39:52,320
+Meru or specialised knowledge
+
+570
+00:39:53,344 --> 00:39:54,368
+However
+
+571
+00:39:54,624 --> 00:39:57,184
+If you want to rt factor system
+
+572
+00:39:57,696 --> 00:40:00,000
+That has general intelligence
+
+573
+00:40:00,256 --> 00:40:02,816
+That can work intelligency in any domain
+
+574
+00:40:04,352 --> 00:40:06,400
+We need to have a lot of things
+
+575
+00:40:07,680 --> 00:40:08,960
+For example
+
+576
+00:40:09,216 --> 00:40:10,752
+Such a system must have come
+
+577
+00:40:11,008 --> 00:40:12,544
+Raman science knowledge
+
+578
+00:40:13,824 --> 00:40:17,664
+Which is needed to function in open ended work
+
+579
+00:40:20,736 --> 00:40:21,760
+We use
+
+580
+00:40:22,016 --> 00:40:27,648
+Amount of common sense knowledge your background knowledge to do our thoughts well
+
+581
+00:40:28,160 --> 00:40:29,952
+If you really start
+
+582
+00:40:30,720 --> 00:40:31,744
+Thinking and
+
+583
+00:40:32,000 --> 00:40:33,280
+Cyanotic down
+
+584
+00:40:33,792 --> 00:40:35,072
+Which is a huge asset
+
+585
+00:40:36,864 --> 00:40:40,192
+Benefits stanford university
+
+586
+00:40:40,448 --> 00:40:43,520
+Buy chocolates and others
+
+587
+00:40:44,544 --> 00:40:45,824
+On the psych project
+
+588
+00:40:46,336 --> 00:40:48,384
+Objective is to
+
+589
+00:40:49,408 --> 00:40:50,432
+Document
+
+590
+00:40:50,944 --> 00:40:52,736
+All commercials knowledge so
+
+591
+00:40:54,272 --> 00:40:55,808
+One can have a system
+
+592
+00:40:56,320 --> 00:40:59,392
+That can use all those comments installous for babies
+
+593
+00:41:01,184 --> 00:41:01,952
+Secondly
+
+594
+00:41:02,720 --> 00:41:08,864
+Essential unconstrained resistance must be able to understand natural language
+
+595
+00:41:11,680 --> 00:41:14,240
+In fact unconstrained natural language
+
+596
+00:41:15,008 --> 00:41:16,800
+I have been a lot of rides
+
+597
+00:41:17,056 --> 00:41:18,848
+Ai natural language understanding
+
+598
+00:41:19,616 --> 00:41:24,224
+Understanding unconstrained natural language in general is a very difficult problem
+
+599
+00:41:25,504 --> 00:41:28,576
+Which will require a lot of experience to solve completely
+
+600
+00:41:31,392 --> 00:41:33,696
+Watkins todavia systems 2
+
+601
+00:41:35,488 --> 00:41:38,560
+I have substance that can recognise faces
+
+602
+00:41:41,376 --> 00:41:42,400
+We have fun
+
+603
+00:41:43,168 --> 00:41:44,704
+Almost autonomous
+
+604
+00:41:45,984 --> 00:41:46,752
+Bakers
+
+605
+00:41:49,056 --> 00:41:53,919
+Have a natural language processing systems can do simple machine translation
+
+606
+00:41:56,479 --> 00:41:59,807
+Expert systems dental medical diagnosis
+
+607
+00:42:00,831 --> 00:42:02,367
+Naruto main
+
+608
+00:42:06,719 --> 00:42:12,351
+Our spoken language systems are capable of thousands words continuous speech
+
+609
+00:42:13,631 --> 00:42:15,423
+Planning and scheduling systems
+
+610
+00:42:15,935 --> 00:42:18,495
+Used in hubble telescope experiment
+
+611
+00:42:19,007 --> 00:42:23,359
+You may have me know that hubble telescope is one of the most well known
+
+612
+00:42:23,615 --> 00:42:28,479
+Telescopes have been around for 7 years now the top of this man thing it's because
+
+613
+00:42:29,247 --> 00:42:30,015
+It has
+
+614
+00:42:31,039 --> 00:42:32,831
+I told and the
+
+615
+00:42:33,599 --> 00:42:36,415
+Cost of maintaining it is the muse but it has
+
+616
+00:42:36,927 --> 00:42:37,951
+A long time
+
+617
+00:42:38,207 --> 00:42:39,487
+Hubble telescope
+
+618
+00:42:39,743 --> 00:42:40,767
+Has been
+
+619
+00:42:41,279 --> 00:42:44,351
+Most important telescope for gathering a lot of data
+
+620
+00:42:44,863 --> 00:42:46,143
+There are so many
+
+621
+00:42:46,911 --> 00:42:48,447
+People who want to
+
+622
+00:42:48,959 --> 00:42:51,263
+Use the hubble telescope
+
+623
+00:42:51,519 --> 00:42:57,663
+Does a complex planning and scheduling problem to schedule this tasks on the telescope attachment on by
+
+624
+00:42:57,919 --> 00:42:58,943
+System
+
+625
+00:43:00,991 --> 00:43:07,135
+Learning about text categorisation systems and worked and categorise the text about thousand topics
+
+626
+00:43:09,439 --> 00:43:14,559
+Indane gas customer service east grand master level in chess
+
+627
+00:43:14,815 --> 00:43:18,911
+Best champions
+
+628
+00:43:20,959 --> 00:43:22,495
+We have good
+
+629
+00:43:22,751 --> 00:43:25,311
+Programs playing checkers
+
+630
+00:43:26,591 --> 00:43:30,943
+But there are many limitations to what i cannot do yet
+
+631
+00:43:32,735 --> 00:43:35,551
+Systems currently
+
+632
+00:43:35,807 --> 00:43:39,135
+Cannot understand natural language robustly
+
+633
+00:43:41,439 --> 00:43:43,999
+Customs cannot search the web yet
+
+634
+00:43:45,791 --> 00:43:49,119
+Interpret and arbitrary visual scene
+
+635
+00:43:49,375 --> 00:43:52,703
+Fc that they can recognise special images
+
+636
+00:43:53,215 --> 00:43:56,287
+Orbit kina naruto main of recognition
+
+637
+00:43:57,567 --> 00:44:00,895
+Isis to sq not fully learner natural language
+
+638
+00:44:01,919 --> 00:44:07,551
+Cannot construct plans in all sorts of dynamic query time domains in general
+
+639
+00:44:08,575 --> 00:44:13,183
+Insistence to not get exited
+
+640
+00:44:13,951 --> 00:44:17,023
+True autonomy and intelligence
+
+641
+00:44:22,399 --> 00:44:28,031
+Now that we have looked at some of the approaches of ai and what i can do and not too
+
+642
+00:44:29,311 --> 00:44:30,335
+At present
+
+643
+00:44:31,359 --> 00:44:32,383
+Latest songs
+
+644
+00:44:33,663 --> 00:44:36,991
+At the brief history of artificial intelligence
+
+645
+00:44:42,111 --> 00:44:45,439
+The dream of making a computer imitators
+
+646
+00:44:45,951 --> 00:44:48,511
+Many centuries ago
+
+647
+00:44:49,791 --> 00:44:53,631
+Intellectual roots of a trash bag
+
+648
+00:44:53,887 --> 00:44:59,007
+How some shares into the earlier studies of the nature of knowledge
+
+649
+00:44:59,775 --> 00:45:00,799
+And the nature of
+
+650
+00:45:01,055 --> 00:45:01,823
+Weasley
+
+651
+00:45:04,383 --> 00:45:08,991
+The concept of intelligent machine was found in greek mythology
+
+652
+00:45:10,015 --> 00:45:11,295
+Century
+
+653
+00:45:13,087 --> 00:45:14,879
+Is credited to have
+
+654
+00:45:15,647 --> 00:45:16,671
+Ask
+
+655
+00:45:16,927 --> 00:45:18,975
+The causes and obtain
+
+656
+00:45:19,487 --> 00:45:22,047
+Eiffel is statue of a woman
+
+657
+00:45:24,607 --> 00:45:26,655
+After the fashion that you like
+
+658
+00:45:28,703 --> 00:45:29,727
+Justice
+
+659
+00:45:31,007 --> 00:45:34,335
+Created a huge robot carlos
+
+660
+00:45:35,615 --> 00:45:38,943
+Stupid creature does robust
+
+661
+00:45:39,711 --> 00:45:40,735
+Juice 2
+
+662
+00:45:41,503 --> 00:45:43,551
+Island of crete
+
+663
+00:45:43,807 --> 00:45:46,367
+Running store fat in better
+
+664
+00:45:47,135 --> 00:45:50,975
+And to the track together and this is found an opponent
+
+665
+00:45:51,231 --> 00:45:52,255
+It photo
+
+666
+00:45:53,279 --> 00:45:54,815
+Squeeze him to death
+
+667
+00:45:58,143 --> 00:46:01,471
+Intelligence straws from many areas
+
+668
+00:46:03,519 --> 00:46:04,799
+Some mathematics
+
+669
+00:46:05,311 --> 00:46:06,591
+From comics
+
+670
+00:46:07,359 --> 00:46:08,127
+Balaji
+
+671
+00:46:08,639 --> 00:46:09,663
+Psychology
+
+672
+00:46:10,687 --> 00:46:12,991
+And from computer engineering
+
+673
+00:46:15,295 --> 00:46:18,111
+And also from linguistics
+
+674
+00:46:19,135 --> 00:46:22,719
+Philosophers of analyse the nature of knowledge
+
+675
+00:46:23,231 --> 00:46:24,767
+And have explored
+
+676
+00:46:25,023 --> 00:46:28,607
+Formal frameworks for developing conclusions
+
+677
+00:46:29,887 --> 00:46:33,215
+Rap in mathematical formulas iitians in logic
+
+678
+00:46:33,471 --> 00:46:36,031
+In computation and probability
+
+679
+00:46:37,311 --> 00:46:40,383
+Economist has developed decision theory
+
+680
+00:46:41,407 --> 00:46:42,943
+And reasons about
+
+681
+00:46:45,247 --> 00:46:50,623
+Biologists have returned about how the brain processes information
+
+682
+00:46:52,415 --> 00:46:53,695
+Psychologist
+
+683
+00:46:53,951 --> 00:46:55,231
+Have long studied
+
+684
+00:46:55,999 --> 00:46:57,279
+Human cognition
+
+685
+00:46:58,047 --> 00:46:58,815
+And
+
+686
+00:46:59,327 --> 00:47:03,423
+Knowledge about the nature of human intelligence
+
+687
+00:47:04,959 --> 00:47:08,543
+And finally we want to know how to build a
+
+688
+00:47:08,799 --> 00:47:10,591
+Efficient computer
+
+689
+00:47:12,895 --> 00:47:15,711
+Studies aristotle
+
+690
+00:47:16,223 --> 00:47:18,015
+In the 4th century bc
+
+691
+00:47:18,271 --> 00:47:21,599
+Definite and informal system of logic
+
+692
+00:47:21,855 --> 00:47:23,647
+Which was the first
+
+693
+00:47:23,903 --> 00:47:26,719
+Deductive reasoning system
+
+694
+00:47:27,999 --> 00:47:31,071
+In the 13 century we have ramanlal
+
+695
+00:47:31,327 --> 00:47:33,119
+Spanish telogen
+
+696
+00:47:33,631 --> 00:47:36,447
+Who invented idea of a machine
+
+697
+00:47:36,703 --> 00:47:38,751
+That would produce all knowledge
+
+698
+00:47:39,007 --> 00:47:41,055
+Words at random
+
+699
+00:47:41,567 --> 00:47:45,151
+Tried to build such a machine is concept wheel
+
+700
+00:47:47,455 --> 00:47:49,759
+In the 17 century
+
+701
+00:47:50,271 --> 00:47:55,903
+Scortis propose that bodies of animals or nothing more than complex machines
+
+702
+00:47:57,951 --> 00:48:04,095
+Base pascal and 16:40 to go to the first mechanical digital calculating machine
+
+703
+00:48:05,119 --> 00:48:09,215
+Lifemates 1673 improved paskals machine
+
+704
+00:48:11,775 --> 00:48:14,079
+So that was the first tab
+
+705
+00:48:14,591 --> 00:48:17,407
+Insulting a mechanical computing device
+
+706
+00:48:17,663 --> 00:48:22,783
+Century jodhpur developed a binary algebra representation
+
+707
+00:48:25,087 --> 00:48:28,159
+Which laid the foundation of boolean algebra
+
+708
+00:48:29,951 --> 00:48:31,487
+Patterns
+
+709
+00:48:31,999 --> 00:48:34,303
+Nadiya ke paar songs
+
+710
+00:48:34,559 --> 00:48:38,655
+Worked on programmable mechanical calculating machine
+
+711
+00:48:40,703 --> 00:48:42,751
+In the late nineteenth century
+
+712
+00:48:43,007 --> 00:48:45,055
+And early 20th century
+
+713
+00:48:45,311 --> 00:48:48,895
+Mathematical philosophers clive gottlieb french
+
+714
+00:48:49,151 --> 00:48:50,687
+Spectrum russell
+
+715
+00:48:51,455 --> 00:48:54,271
+Outside whiteheads and kurt godel
+
+716
+00:48:55,039 --> 00:48:58,111
+Full time position logic concepts
+
+717
+00:48:58,367 --> 00:49:02,719
+The chapel of mathematical representation of logic problems
+
+718
+00:49:04,767 --> 00:49:07,327
+Types of electronic computers
+
+719
+00:49:07,583 --> 00:49:10,911
+Provide a revolutionary advance
+
+720
+00:49:11,167 --> 00:49:13,727
+Inability to study intelligence
+
+721
+00:49:15,263 --> 00:49:17,055
+In 1943
+
+722
+00:49:17,311 --> 00:49:19,359
+Bangalore concerts
+
+723
+00:49:19,615 --> 00:49:22,687
+Delta boolean circuit model of the fray
+
+724
+00:49:23,455 --> 00:49:28,831
+Illogical calculus by gsm and antony novice activity was published
+
+725
+00:49:30,111 --> 00:49:35,231
+I need to explain for the first time how it is possible for neural networks to compute
+
+726
+00:49:36,255 --> 00:49:42,399
+Martin whisky and teen at mums pills to the smart in 1951 which is a neural network come
+
+727
+00:49:45,727 --> 00:49:49,567
+Alan turing in 1960
+
+728
+00:49:49,823 --> 00:49:50,591
+Curing
+
+729
+00:49:50,847 --> 00:49:53,663
+Published computing machinery and intelligence
+
+730
+00:49:53,919 --> 00:49:54,687
+And this
+
+731
+00:49:54,943 --> 00:49:58,271
+Article articulated the complete edition offline
+
+732
+00:49:59,039 --> 00:50:05,183
+Solving problems how it systems can solve problems by searching through a space of possible cinema
+
+733
+00:50:06,719 --> 00:50:08,255
+Lighted pasula sticks
+
+734
+00:50:09,279 --> 00:50:13,887
+Illustrator design ideas and machine intelligence by reference to check
+
+735
+00:50:14,655 --> 00:50:20,799
+Propounded the possibility of letting the machine altered its own instructions
+
+736
+00:50:21,311 --> 00:50:24,383
+So that machines can learn from experience
+
+737
+00:50:26,943 --> 00:50:30,015
+United 5256 samuel
+
+738
+00:50:30,527 --> 00:50:33,087
+Aaj assigned akshay cosplaying program
+
+739
+00:50:33,855 --> 00:50:36,927
+1956 island new version
+
+740
+00:50:37,183 --> 00:50:39,487
+Herbert simon design the logic
+
+741
+00:50:42,047 --> 00:50:45,631
+Then the general problem solver was built by the same people
+
+742
+00:50:46,655 --> 00:50:52,799
+1959 disaster developed the geometry engine for solving plane geometry problems
+
+743
+00:50:54,591 --> 00:50:59,711
+United 56 a meeting was held in the mouth where does
+
+744
+00:51:00,991 --> 00:51:02,015
+First
+
+745
+00:51:02,783 --> 00:51:04,575
+Resorts in uae match
+
+746
+00:51:05,087 --> 00:51:10,975
+And in this last longer meeting that on artificial intelligence was adopted
+
+747
+00:51:11,487 --> 00:51:17,119
+This conference does together trust together the founding fathers of the year for the first time
+
+748
+00:51:18,911 --> 00:51:25,055
+1961 james flatley wrote the first symbolic integration programs
+
+749
+00:51:25,311 --> 00:51:26,847
+This program sent
+
+750
+00:51:27,103 --> 00:51:30,943
+False calculus problems for the college freshman level
+
+751
+00:51:31,967 --> 00:51:36,063
+63 thomas events program analysis
+
+752
+00:51:36,831 --> 00:51:39,903
+Find it could solve iq test problems
+
+753
+00:51:40,671 --> 00:51:43,999
+90635 gun for maths solutions
+
+754
+00:51:44,767 --> 00:51:46,559
+Roja collection of
+
+755
+00:51:46,815 --> 00:51:49,375
+Important articles about ai
+
+756
+00:51:50,911 --> 00:51:51,935
+Then we have
+
+757
+00:51:52,191 --> 00:51:54,495
+Danny bobrow in 64
+
+758
+00:51:56,799 --> 00:51:57,311
+Work
+
+759
+00:51:57,823 --> 00:52:01,663
+Algebra word problems 1965 allen
+
+760
+00:52:02,175 --> 00:52:04,991
+Robinson chapel of the resolution methods
+
+761
+00:52:08,063 --> 00:52:14,207
+1966 to 74 there is a lot of work on computational complexity by not really
+
+762
+00:52:15,999 --> 00:52:20,607
+Shortest path for computer scientists computer purest
+
+763
+00:52:21,375 --> 00:52:23,935
+Which had a tremendous impact on the
+
+764
+00:52:24,191 --> 00:52:25,215
+Pizza
+
+765
+00:52:25,471 --> 00:52:26,495
+The forecast
+
+766
+00:52:28,031 --> 00:52:33,919
+Start a lot of things are possible by ar you soon have extremely intelligent computer
+
+767
+00:52:34,687 --> 00:52:38,783
+Baadshah the limitations to the computation of power
+
+768
+00:52:39,039 --> 00:52:40,319
+First discovered
+
+769
+00:52:40,575 --> 00:52:43,903
+Computational complexity was understood
+
+770
+00:52:47,743 --> 00:52:52,351
+19575 in bowman others develop the dental program
+
+771
+00:52:54,399 --> 00:52:55,167
+Witches
+
+772
+00:52:55,679 --> 00:53:01,823
+Jabong straightened which was used to demonstrate and interpret mass spectrum organic
+
+773
+00:53:02,079 --> 00:53:03,359
+Chemical compounds
+
+774
+00:53:06,175 --> 00:53:10,271
+In 1968 there was a very significant
+
+775
+00:53:10,527 --> 00:53:12,831
+Paper by mills cayenne pepper
+
+776
+00:53:13,343 --> 00:53:17,183
+Which demonstrated the limits of simple neural net
+
+777
+00:53:17,695 --> 00:53:21,023
+This paper had a tremendous negative effects
+
+778
+00:53:21,535 --> 00:53:22,815
+Discouraging
+
+779
+00:53:23,071 --> 00:53:24,863
+The field of cable network
+
+780
+00:53:25,375 --> 00:53:26,655
+For the time being
+
+781
+00:53:26,911 --> 00:53:30,751
+And letter of course people realise that they are
+
+782
+00:53:31,775 --> 00:53:33,567
+Ways of coming out of the stuff
+
+783
+00:53:34,591 --> 00:53:36,127
+69
+
+784
+00:53:36,639 --> 00:53:41,759
+The robots shaky developed at essar oil in stanford demonstration
+
+785
+00:53:42,783 --> 00:53:45,855
+Loco motion perception and problem solving
+
+786
+00:53:47,391 --> 00:53:49,695
+1969 279
+
+787
+00:53:49,951 --> 00:53:51,999
+Knowledge systems are developed
+
+788
+00:53:52,767 --> 00:53:54,047
+Striptease
+
+789
+00:53:57,375 --> 00:53:59,935
+1976 jobline earth
+
+790
+00:54:00,191 --> 00:54:05,055
+Has a program called a man used for which demonstrated the discovery model
+
+791
+00:54:05,567 --> 00:54:11,711
+1978 half of 5 months from cm you won the nobel prize in economics for his
+
+792
+00:54:11,967 --> 00:54:14,271
+Theory of bounded rationality
+
+793
+00:54:15,295 --> 00:54:19,135
+Imagine 8 years list machines were developed and marketed
+
+794
+00:54:19,391 --> 00:54:25,535
+1985 n 95 neural networks returned the popularity in the period to make you fat client
+
+795
+00:54:25,791 --> 00:54:26,303
+95
+
+796
+00:54:27,071 --> 00:54:32,959
+Addatoday 2870 surgeons of probabilistic and decision theoretic methods
+
+797
+00:54:36,543 --> 00:54:38,591
+Systems used
+
+798
+00:54:38,847 --> 00:54:40,895
+Control systems general knowledge
+
+799
+00:54:41,663 --> 00:54:47,295
+Fat recently i systems you specialise knowledge to perform specific task
+
+800
+00:54:48,063 --> 00:54:52,671
+2090 years they have a major advances in all areas of uae
+
+801
+00:54:52,927 --> 00:54:54,463
+Including machine learning
+
+802
+00:54:54,719 --> 00:54:56,255
+Intelligent tutoring
+
+803
+00:54:57,023 --> 00:54:58,559
+Multiagent learning
+
+804
+00:54:59,071 --> 00:55:04,447
+Uncertain reasoning natural language understanding translation vision
+
+805
+00:55:04,703 --> 00:55:05,983
+Another topics
+
+806
+00:55:06,751 --> 00:55:08,031
+Rodney brooks
+
+807
+00:55:08,543 --> 00:55:11,359
+Worked on the cox project at mit
+
+808
+00:55:11,871 --> 00:55:16,223
+Which made significant progress in building a humanoid robots
+
+809
+00:55:16,479 --> 00:55:20,063
+Everything looks at the deep blue chess playing program
+
+810
+00:55:23,903 --> 00:55:29,535
+And we have intel interactive robots pets it has become commercially available
+
+811
+00:55:29,791 --> 00:55:33,375
+Realising the vision of the 18 century toy makers
+
+812
+00:55:33,631 --> 00:55:39,007
+In 2000 the nomad robot export remote regions of antarctica
+
+813
+00:55:40,287 --> 00:55:41,823
+And is
+
+814
+00:55:42,079 --> 00:55:45,407
+Popular topics which is constantly in the news
+
+815
+00:55:47,199 --> 00:55:49,247
+Services weather site
+
+816
+00:55:49,503 --> 00:55:50,015
+Which
+
+817
+00:55:51,039 --> 00:55:55,903
+Publishers news about triple a site which publishes news about uae
+
+818
+00:55:56,415 --> 00:55:57,951
+Insecticide
+
+819
+00:55:58,207 --> 00:55:59,487
+Define that
+
+820
+00:55:59,743 --> 00:56:01,023
+Anytime
+
+821
+00:56:01,279 --> 00:56:04,095
+All the lot of interesting news on a i
+
+822
+00:56:05,887 --> 00:56:09,215
+So with this we will end today's lecture
+
+823
+00:56:09,983 --> 00:56:12,799
+Panjabi 4b and have a few questions
+
+824
+00:56:14,591 --> 00:56:16,895
+Question 1 define intelligence
+
+825
+00:56:17,663 --> 00:56:18,943
+Question 2
+
+826
+00:56:19,455 --> 00:56:21,759
+What are the different approaches
+
+827
+00:56:22,527 --> 00:56:23,807
+Inter signing
+
+828
+00:56:24,063 --> 00:56:25,855
+Artificial intelligence
+
+829
+00:56:27,903 --> 00:56:28,927
+Question 3
+
+830
+00:56:29,951 --> 00:56:36,095
+Suppose you design a machine to pass the turing test what are the capabilities such a machine mast
+
+831
+00:56:38,143 --> 00:56:39,167
+Questions for
+
+832
+00:56:40,191 --> 00:56:42,239
+Design 10 questions
+
+833
+00:56:42,751 --> 00:56:47,359
+The postman on machine that is taking the turing test
+
+834
+00:56:48,127 --> 00:56:49,407
+Question 5
+
+835
+00:56:50,175 --> 00:56:54,783
+Will building and ai computer automatically sheds light
+
+836
+00:56:55,039 --> 00:56:58,623
+On the nature of natural intelligence do you think so
+
+837
+00:57:01,951 --> 00:57:06,047
+Question 6 list 5 stars
+
+838
+00:57:06,303 --> 00:57:08,607
+That you will like a computer
+
+839
+00:57:08,863 --> 00:57:12,447
+To be able to do within the next 5 years
+
+840
+00:57:13,727 --> 00:57:16,031
+The last question question 7
+
+841
+00:57:17,055 --> 00:57:18,847
+List 5 stars
+
+842
+00:57:19,103 --> 00:57:21,663
+Stat computers and likely to
+
+843
+00:57:21,919 --> 00:57:25,247
+To be able to do in the next 10 years the
+
+844
+00:57:25,503 --> 00:57:28,319
+Just come to the end of today's lecture

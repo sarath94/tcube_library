@@ -1,0 +1,723 @@
+Chapter 5: Advanced SQL
+
+
+
+
+   Database System Concepts, 6th Ed.
+        ©Silberschatz, Korth and Sudarshan
+   See www.db-book.com for conditions on re-use
+                                  Chapter 5: Advanced SQL
+
+              Accessing SQL From a Programming Language
+                        Dynamic SQL
+                            JDBC        and ODBC
+                        Embedded SQL
+              SQL Data Types and Schemas
+              Functions and Procedural Constructs
+              Triggers
+              Advanced Aggregation Features
+              OLAP
+
+
+
+
+Database System Concepts - 6th Edition              5.2    ©Silberschatz, Korth and Sudarshan
+                                         JDBC and ODBC
+             API (application-program interface) for a program to interact
+                  with a database server
+             Application makes calls to
+                       Connect with the database server
+                       Send SQL commands to the database server
+                       Fetch tuples of result one-by-one into program variables
+             ODBC (Open Database Connectivity) works with C, C++, C#,
+                  and Visual Basic
+                       Other API‟s such as ADO.NET sit on top of ODBC
+             JDBC (Java Database Connectivity) works with Java
+
+
+
+
+Database System Concepts - 6th Edition            5.3                 ©Silberschatz, Korth and Sudarshan
+                                               JDBC
+
+              JDBC is a Java API for communicating with database systems
+                  supporting SQL.
+              JDBC supports a variety of features for querying and updating
+                  data, and for retrieving query results.
+              JDBC also supports metadata retrieval, such as querying about
+                  relations present in the database and the names and types of
+                  relation attributes.
+              Model for communicating with the database:
+                        Open a connection
+                        Create a “statement” object
+                        Execute queries using the Statement object to send queries
+                         and fetch results
+                        Exception mechanism to handle errors
+
+
+Database System Concepts - 6th Edition            5.4                ©Silberschatz, Korth and Sudarshan
+                                             JDBC Code
+               public static void JDBCexample(String dbid, String userid, String passwd)
+               {
+                   try {
+                        Class.forName ("oracle.jdbc.driver.OracleDriver");
+                        Connection conn = DriverManager.getConnection(
+                            "jdbc:oracle:thin:@db.yale.edu:2000:univdb", userid, passwd);
+                        Statement stmt = conn.createStatement();
+                            … Do Actual Work ….
+                        stmt.close();
+                        conn.close();
+                   }
+                   catch (SQLException sqle) {
+                        System.out.println("SQLException : " + sqle);
+                   }
+               }
+
+
+
+Database System Concepts - 6th Edition                5.5                    ©Silberschatz, Korth and Sudarshan
+                                         JDBC Code (Cont.)
+
+              Update to database
+                  try {
+                     stmt.executeUpdate(
+                        "insert into instructor values(’77987’, ’Kim’, ’Physics’, 98000)");
+                  } catch (SQLException sqle)
+                  {
+                     System.out.println("Could not insert tuple. " + sqle);
+                  }
+              Execute query and fetch and print results
+                         ResultSet rset = stmt.executeQuery(
+                                              "select dept_name, avg (salary)
+                                               from instructor
+                                               group by dept_name");
+                         while (rset.next()) {
+                             System.out.println(rset.getString("dept_name") + " " +
+                                                       rset.getFloat(2));
+                         }
+
+
+Database System Concepts - 6th Edition             5.6                  ©Silberschatz, Korth and Sudarshan
+                                         JDBC Code Details
+
+              Getting result fields:
+                        rs.getString(“dept_name”) and rs.getString(1)
+                         equivalent if dept_name is the first argument of select
+                         result.
+              Dealing with Null values
+                        int a = rs.getInt(“a”);
+                         if (rs.wasNull()) Systems.out.println(“Got null value”);
+
+
+         Quiz Q1: What happens if rs.getString(“salary”) is executed with a
+         query “select * from instructor”:
+         (A) A run time error occurs since the type of salary is numeric, not string
+         (B) A compile time error occurs due to the type mismatch
+         (C) The JDBC API automatically converts the numeric value to a string
+         (D) None of the above
+
+Database System Concepts - 6th Edition             5.7                ©Silberschatz, Korth and Sudarshan
+                                         Prepared Statement
+           PreparedStatement pStmt = conn.prepareStatement(
+                                            "insert into instructor values(?,?,?,?)");
+               pStmt.setString(1, "88877");    pStmt.setString(2, "Perry");
+               pStmt.setString(3, "Finance"); pStmt.setInt(4, 125000);
+               pStmt.executeUpdate();
+               pStmt.setString(1, "88878");
+               pStmt.executeUpdate();
+           For queries, use pStmt.executeQuery(), which returns a ResultSet
+           WARNING: always use prepared statements when taking an input
+               from the user and adding it to a query
+                     NEVER create a query by concatenating strings which you
+                      get as inputs
+                     "insert into instructor values(‟ " + ID + " ‟, ‟ " + name + " ‟, " +
+                                                    " ‟ + dept name + " ‟, " ‟ balance + ")“
+                     What if name is “D‟Souza”?
+
+Database System Concepts - 6th Edition              5.8                   ©Silberschatz, Korth and Sudarshan
+                                         SQL Injection
+             Suppose query is constructed using
+                  "select * from instructor where name = ‟" + name + "‟"
+                    
+             Suppose the user, instead of entering a name, enters:
+                X‟ or ‟Y‟ = ‟Y
+             then the resulting statement becomes:
+                "select * from instructor where name = ‟" + "X‟ or ‟Y‟ = ‟Y" + "‟"
+                which is:
+                    select * from instructor where name = ‟X‟ or ‟Y‟ = ‟Y‟
+
+                User could have even used
+                    X‟; update instructor set salary = salary + 10000; --
+
+             Prepared statement internally uses:
+              "select * from instructor where name = ‟X\‟ or \‟Y\‟ = \‟Y‟
+                Always use prepared statements, with user inputs as
+                  parameters
+
+Database System Concepts - 6th Edition        5.9                  ©Silberschatz, Korth and Sudarshan
+                                         Quiz Break
+
+
+
+
+          Quiz Q2: Consider the following piece of code
+
+                PreparedStatement pstmt = conn.prepareStatement(
+                        "select * from instructor where name = ‟" + name + "‟“);
+                ResultSet rs = pstmt.executeQuery();
+
+          Is the above code secure?
+          (A)Yes, since we are using prepared statements
+          (B) No, since we are concatenating strings SQL injection can still occur
+          (C)Yes, since we are using executeQuery();
+          (D) No, since we are using executeQuery();
+
+Database System Concepts - 6th Edition        5.10                 ©Silberschatz, Korth and Sudarshan
+                                         Metadata Features
+             ResultSet metadata
+             E.g., after executing query to get a ResultSet rs:
+                       ResultSetMetaData rsmd = rs.getMetaData();
+                         for(int i = 1; i <= rsmd.getColumnCount(); i++) {
+                                System.out.println(rsmd.getColumnName(i));
+                                System.out.println(rsmd.getColumnTypeName(i));
+                          }
+             How is this useful?
+
+
+
+
+Database System Concepts - 6th Edition              5.11                ©Silberschatz, Korth and Sudarshan
+                                         Metadata (Cont)
+        Database metadata
+        DatabaseMetaData dbmd = conn.getMetaData();
+            ResultSet rs = dbmd.getColumns(null, "univdb", "department", "%");
+            // Arguments to getColumns: Catalog, Schema-pattern, Table-pattern,
+            // and Column-Pattern
+            // Returns: One row for each column; row has a number of attributes
+            // such as COLUMN_NAME, TYPE_NAME
+            while( rs.next()) {
+                    System.out.println(rs.getString("COLUMN_NAME"),
+                                              rs.getString("TYPE_NAME");
+            }
+        And where is this useful?
+
+
+Database System Concepts - 6th Edition         5.12              ©Silberschatz, Korth and Sudarshan
+                           Transaction Control in JDBC
+
+              By default, each SQL statement is treated as a separate
+                  transaction that is committed automatically
+                        bad idea for transactions with multiple updates
+              Can turn off automatic commit on a connection
+                        conn.setAutoCommit(false);
+              Transactions must then be committed or rolled back explicitly
+                        conn.commit();     or
+                        conn.rollback();
+              conn.setAutoCommit(true) turns on automatic commit.
+
+
+
+
+Database System Concepts - 6th Edition             5.13                ©Silberschatz, Korth and Sudarshan
+               Procedural Extensions and Stored Procedures
+
+              SQL provides a module language
+                        Permits definition of procedures in SQL, with if-then-else
+                         statements, for and while loops, etc.
+              Stored Procedures
+                        Can store procedures in the database
+                        then execute them using the call statement
+                        permit external applications to operate on the database
+                         without knowing about internal details
+              Object-oriented aspects of these features are covered in Chapter
+                  22 (Object Based Databases)
+
+
+
+
+Database System Concepts - 6th Edition             5.14                 ©Silberschatz, Korth and Sudarshan
+                                         SQL Functions
+
+              Define a function that, given the name of a department, returns
+                  the count of the number of instructors in that department.
+                         create function dept_count (dept_name varchar(20))
+                         returns integer
+                         begin
+                            declare d_count integer;
+                            select count (* ) into d_count
+                            from instructor
+                            where instructor.dept_name = dept_name
+                            return d_count;
+                         end
+              Find the department name and budget of all departments with
+                  more that 12 instructors.
+                          select dept_name, budget
+                          from department
+                          where dept_count (dept_name ) > 1
+Database System Concepts - 6th Edition           5.15               ©Silberschatz, Korth and Sudarshan
+                                         Table Functions
+           SQL:2003 added functions that return a relation as a result
+           Example: Return all accounts owned by a given customer
+                create function instructors_of (dept_name char(20)
+                         returns table ( ID varchar(5),
+                                         name varchar(20),
+                                           dept_name varchar(20),
+                                         salary numeric(8,2))
+                return table
+                     (select ID, name, dept_name, salary
+                      from instructor
+                      where instructor.dept_name = instructors_of.dept_name)
+           Usage
+                         select *
+                         from table (instructors_of („Music‟))
+
+
+
+Database System Concepts - 6th Edition             5.16             ©Silberschatz, Korth and Sudarshan
+                                         SQL Procedures
+
+              The dept_count function could instead be written as procedure:
+                  create procedure dept_count_proc (in dept_name varchar(20),
+                                                     out d_count integer)
+                  begin
+                     select count(*) into d_count
+                     from instructor
+                     where instructor.dept_name = dept_count_proc.dept_name
+                  end
+              Procedures can be invoked either from an SQL procedure or from
+                  embedded SQL, using the call statement.
+                           declare d_count integer;
+                           call dept_count_proc( „Physics‟, d_count);
+                  Procedures and functions can be invoked also from JDBC/ODBC/..
+
+
+
+Database System Concepts - 6th Edition             5.17                 ©Silberschatz, Korth and Sudarshan
+                                         Procedural Constructs
+
+              Warning: most database systems implement their own variant of
+                  the standard syntax below
+                        read your system manual to see what works on your system
+              Compound statement: begin … end,
+                        May contain multiple SQL statements between begin and
+                         end.
+                        Local variables can be declared within a compound statements
+              While, repeat and for loops:
+                           declare n integer default 0;
+                           while n < 10 do
+                             set n = n + 1
+                           end while
+
+
+
+
+Database System Concepts - 6th Edition            5.18               ©Silberschatz, Korth and Sudarshan
+                                         Triggers
+
+
+
+
+Database System Concepts - 6th Edition       5.19   ©Silberschatz, Korth and Sudarshan
+                                               Triggers
+
+                 A trigger is a statement that is executed automatically by
+                      the system as a side effect of a modification to the
+                      database.
+                 To design a trigger mechanism, we must:
+                           Specify the conditions under which the trigger is to be
+                            executed.
+                           Specify the actions to be taken when the trigger
+                            executes.
+                 Triggers introduced to SQL standard in SQL:1999, but
+                      supported even earlier using non-standard syntax by
+                      most databases.
+                           Syntax illustrated here may not work exactly on your
+                            database system; check the system manuals
+
+
+
+Database System Concepts - 6th Edition              5.20                 ©Silberschatz, Korth and Sudarshan
+                                         Trigger Example
+
+          E.g. time_slot_id is not a primary key of timeslot, so we cannot
+              create a foreign key constraint from section to timeslot.
+          Alternative: use triggers on section and timeslot to enforce integrity
+              constraints
+              create trigger timeslot_check1 after insert on section
+              referencing new row as nrow
+              for each row
+              when (nrow.time_slot_id not in (
+                         select time_slot_id
+                         from time_slot)) /* time_slot_id not present in time_slot */
+              begin
+                 rollback
+              end;
+
+
+
+
+Database System Concepts - 6th Edition         5.21                 ©Silberschatz, Korth and Sudarshan
+                                         Trigger Example Cont.
+
+      create trigger timeslot_check2 after delete on timeslot
+         referencing old row as orow
+         for each row
+         when (orow.time_slot_id not in (
+                  select time_slot_id
+                  from time_slot)
+                  /* last tuple for time slot id deleted from time slot */
+                and orow.time_slot_id in (
+                  select time_slot_id
+                  from section)) /* and time_slot_id still referenced from section*/
+         begin
+           rollback
+         end;
+
+
+
+
+Database System Concepts - 6th Edition            5.22          ©Silberschatz, Korth and Sudarshan
+                Triggering Events and Actions in SQL
+
+               Triggering event can be insert, delete or update
+               Triggers on update can be restricted to specific attributes
+                    E.g., after update of takes on grade
+                     
+               Values of attributes before and after an update can be
+                referenced
+                  referencing old row as : for deletes and updates
+                  referencing new row as : for inserts and updates
+
+
+
+
+Database System Concepts - 6th Edition        5.23                 ©Silberschatz, Korth and Sudarshan
+                                  When Not To Use Triggers
+
+           Triggers were used earlier for tasks such as
+                     maintaining summary data (e.g., total salary of each department)
+                     Replicating databases by recording changes to special relations
+                      (called change or delta relations) and having a separate process
+                      that applies the changes over to a replica
+           There are better ways of doing these now:
+                     Databases today provide built in materialized view facilities to
+                      maintain summary data
+                     Databases provide built-in support for replication
+           Encapsulation facilities can be used instead of triggers in many cases
+                     Define methods to update fields
+           Risk of unintended execution of triggers, for example, when
+                     loading data from a backup copy
+                     replicating updates at a remote site
+                     Trigger execution can be disabled before such actions.
+
+Database System Concepts - 6th Edition               5.24                    ©Silberschatz, Korth and Sudarshan
+                                         Recursive Queries
+
+
+
+
+Database System Concepts - 6th Edition           5.25        ©Silberschatz, Korth and Sudarshan
+                                             Recursion in SQL
+           Example: find which courses are a prerequisite, whether
+               directly or indirectly, for a specific course
+               with recursive rec_prereq(course_id, prereq_id) as (
+                    select course_id, prereq_id
+                    from prereq
+                  union
+                    select rec_prereq.course_id, prereq.prereq_id,
+                    from rec_prereq, prereq
+                    where rec_prereq.prereq_id = prereq.course_id
+                  )
+               select ∗
+               from rec_prereq;
+               This example view, rec_prereq, is called the transitive closure
+               of the prereq relation
+                                                  course_id   prereq_id
+                                                  CS-401      CS-301
+      Note: 1st printing of 6th ed erroneously
+      used c_prereq in place of                   CS-301      CS-201
+      rec_prereq in some places                   CS-201      CS-101
+Database System Concepts -   6th   Edition           5.26                 ©Silberschatz, Korth and Sudarshan
+                 Recursion in SQL: Iterative Execution
+           with recursive rec_prereq(course_id, prereq_id) as (
+                     select course_id, prereq_id
+                     from prereq
+                   union
+                     select rec_prereq.course_id, prereq.prereq_id,
+                     from rec_prereq, prereq
+                     where rec_prereq.prereq_id = prereq.course_id
+                   )
+                select ∗
+                from rec_prereq;
+
+      course_id          prereq_id           course_id    prereq_id
+                                                                          course_id       prereq_id
+      CS-401             CS-301              CS-401       CS-201
+                                         +                            +   CS-401          CS-101
+      CS-301             CS-201              CS-301       CS-101
+      CS-201             CS-101
+
+           Iteration 1                          New in iteration 2          New in iteration 3
+
+
+Database System Concepts - 6th Edition                   5.27               ©Silberschatz, Korth and Sudarshan
+                     Advanced Aggregation Features
+
+
+
+
+Database System Concepts - 6th Edition   5.28   ©Silberschatz, Korth and Sudarshan
+                                         Ranking
+       Ranking is done in conjunction with an order by specification.
+       Suppose we are given a relation
+                 student_grades(ID, GPA)
+            giving the grade-point average of each student
+       Find the rank of each student.
+                   select ID, rank() over (order by GPA desc) as s_rank
+                   from student_grades
+       An extra order by clause is needed to get them in sorted order
+                   select ID, rank() over (order by GPA desc) as s_rank
+                   from student_grades
+                   order by s_rank
+       Ranking may leave gaps: e.g. if 2 students have the same top GPA,
+            both have rank 1, and the next rank is 3
+                 dense_rank does not leave gaps, so next dense rank would be 2
+
+
+Database System Concepts - 6th Edition        5.29               ©Silberschatz, Korth and Sudarshan
+                                            Ranking
+             Ranking can be done using basic SQL aggregation, but
+                  resultant query is very inefficient
+                        select ID, (1 + (select count(*)
+                                         from student_grades B
+                                         where B.GPA > A.GPA)) as s_rank
+                        from student_grades A
+                        order by s_rank;
+
+
+
+
+Database System Concepts - 6th Edition            5.30             ©Silberschatz, Korth and Sudarshan
+                                         Ranking (Cont.)
+             Ranking can be done within partition of the data.
+             “Find the rank of students within each department.”
+                    select ID, dept_name,
+                        rank () over (partition by dept_name order by GPA
+                  desc)
+                                as dept_rank
+                    from dept_grades
+                    order by dept_name, dept_rank;
+             Multiple rank clauses can occur in a single select clause.
+             Ranking is done after applying group by clause/aggregation
+             Can be used to find top-n results
+                       More general than the limit n clause supported by many
+                        databases, since it allows top-n within each partition
+             Windowing constructs: see book for details
+
+
+Database System Concepts - 6th Edition           5.31               ©Silberschatz, Korth and Sudarshan
+                                         OLAP**
+
+
+
+
+Database System Concepts - 6th Edition      5.32   ©Silberschatz, Korth and Sudarshan
+                                     Data Analysis and OLAP
+       Online Analytical Processing (OLAP)
+                 Interactive analysis of data, allowing data to be summarized and
+                  viewed in different ways in an online fashion (with negligible
+                  delay)
+       Data that can be modeled as dimension attributes and measure
+           attributes are called multidimensional data.
+                 Measure attributes
+                     measure            some value
+                     can      be aggregated upon
+                     e.g.,     the attribute number of the sales relation
+                 Dimension attributes
+                     define the dimensions on which measure attributes (or
+                       aggregates thereof) are viewed
+                     e.g.,     attributes item_name, color, and size of the sales relation
+Database System Concepts - 6th Edition                5.33                   ©Silberschatz, Korth and Sudarshan
+                                          Example sales relation
+
+
+
+
+                                         ...   ...     ...   ...
+Database System Concepts - 6th Edition   ...   ...     ...
+                                                     5.34    ...   ©Silberschatz, Korth and Sudarshan
+          Cross Tabulation of sales by item_name and color
+
+
+
+
+      The table above is an example of a cross-tabulation (cross-tab), also
+           referred to as a pivot-table.
+                Values for one of the dimension attributes form the row headers
+                Values for another dimension attribute form the column headers
+                Other dimension attributes are listed on top
+                Values in individual cells are (aggregates of) the values of the
+                 dimension attributes that specify the cell.
+
+Database System Concepts - 6th Edition             5.35                    ©Silberschatz, Korth and Sudarshan
+                                         Data Cube
+               A data cube is a multidimensional generalization of a cross-tab
+               Can have n dimensions; we show 3 below
+               Cross-tabs can be used as views on a data cube
+
+
+
+
+Database System Concepts - 6th Edition       5.36                ©Silberschatz, Korth and Sudarshan
+            Online Analytical Processing Operations
+
+          Pivoting: changing the dimensions used in a cross-tab is called
+          Slicing: creating a cross-tab for fixed values only
+                   Sometimes called dicing, particularly when values for
+                    multiple dimensions are fixed.
+          Rollup: moving from finer-granularity data to a coarser
+              granularity
+          Drill down: The opposite operation - that of moving from
+              coarser-granularity data to finer-granularity data
+
+
+
+
+Database System Concepts - 6th Edition         5.37                ©Silberschatz, Korth and Sudarshan
+                            Cross Tabulation With Hierarchy
+
+           Cross-tabs can be easily extended to deal with hierarchies
+                     Can drill down or roll up on a hierarchy
+
+
+
+
+Database System Concepts - 6th Edition               5.39        ©Silberschatz, Korth and Sudarshan
+              Relational Representation of Cross-tabs
+
+      Cross-tabs can be represented
+           as relations
+             We use the value all is used
+               to represent aggregates.
+             The SQL standard actually
+               uses null values in place of
+               all despite confusion with
+               regular null values.
+
+
+
+
+Database System Concepts - 6th Edition        5.40   ©Silberschatz, Korth and Sudarshan
+             Extended Aggregation to Support OLAP
+      The cube operation computes union of group by‟s on every subset of the
+           specified attributes
+      Example relation for this section
+              sales(item_name, color, clothes_size, quantity)
+      E.g. consider the query
+                    select item_name, color, size, sum(number)
+                    from sales
+                    group by cube(item_name, color, size)
+           This computes the union of eight different groupings of the sales relation:
+              { (item_name, color, size), (item_name, color),
+                (item_name, size),        (color, size),
+                (item_name),              (color),
+                (size),                  ()}
+           where ( ) denotes an empty group by list.
+      For each grouping, the result contains the null value
+           for attributes not present in the grouping.
+      See book for other operations such as rollup
+Database System Concepts - 6th Edition            5.41                  ©Silberschatz, Korth and Sudarshan
+                                         End of Chapter
+
+
+
+
+Database System Concepts - 6th Edition          5.42      ©Silberschatz, Korth and Sudarshan
+                                                      ODBC
+
+              Open DataBase Connectivity(ODBC) standard
+                        standard for application program to communicate with a
+                         database server.
+                        application program interface (API) to
+                            open        a connection with a database,
+                            send        queries and updates,
+                            get     back results.
+              Applications such as GUI, spreadsheets, etc. can use ODBC
+              Was defined originally for Basic and C, versions available for
+                  many languages.
+
+
+
+
+Database System Concepts - 6th Edition                   5.43            ©Silberschatz, Korth and Sudarshan
+                                            ADO.NET
+
+          API designed for Visual Basic .NET and C#, providing
+              database access facilities similar to JDBC/ODBC
+                    Partial example of ADO.NET code in C#
+                     using System, System.Data, System.Data.SqlClient;
+                     SqlConnection conn = new SqlConnection(
+                               “Data Source=<IPaddr>, Initial Catalog=<Catalog>”);
+                     conn.Open();
+                     SqlCommand cmd = new SqlCommand(“select * from students”,
+                                                                 conn);
+                     SqlDataReader rdr = cmd.ExecuteReader();
+                     while(rdr.Read()) {
+                         Console.WriteLine(rdr[0], rdr[1]); /* Prints first 2 attributes of
+                     result*/
+                     }
+                     rdr.Close(); conn.Close();
+
+
+Database System Concepts - 6th Edition             5.44                  ©Silberschatz, Korth and Sudarshan
+                                         ADO.NET (Cont.)
+          Translated into ODBC calls
+          Can also access non-relational data sources such as
+                    OLE-DB
+                    XML data
+                    Entity framework
+
+
+
+
+Database System Concepts - 6th Edition         5.45         ©Silberschatz, Korth and Sudarshan
+                                         Embedded SQL
+
+            The SQL standard defines embeddings of SQL in a variety of
+                 programming languages such as C, Java, and Cobol.
+            A language to which SQL queries are embedded is referred to as
+                 a host language, and the SQL structures permitted in the host
+                 language comprise embedded SQL.
+            The basic form of these languages follows that of the System R
+                 embedding of SQL into PL/I.
+            EXEC SQL statement is used to identify embedded SQL request
+                 to the preprocessor
+                       EXEC SQL <embedded SQL statement > END_EXEC
+
+
+                 Note: this varies by language (for example, the Java embedding
+                 uses
+                                                     # SQL { …. }; )
+
+Database System Concepts - 6th Edition         5.46               ©Silberschatz, Korth and Sudarshan
+            Trigger to Maintain credits_earned value
+             create trigger credits_earned after update of takes on
+                  (grade)
+                  referencing new row as nrow
+                  referencing old row as orow
+                  for each row
+                  when nrow.grade <> ‟F‟ and nrow.grade is not null
+                     and (orow.grade = ‟F‟ or orow.grade is null)
+                  begin atomic
+                     update student
+                     set tot_cred= tot_cred +
+                         (select credits
+                          from course
+                          where course.course_id= nrow.course_id)
+                     where student.id = nrow.id;
+                  end;
+
+
+
+Database System Concepts - 6th Edition        5.47               ©Silberschatz, Korth and Sudarshan
+
