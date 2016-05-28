@@ -1,0 +1,299 @@
+Chapter 1: Introduction
+
+
+
+
+  Database System Concepts, 6th Ed.
+       ©Silberschatz, Korth and Sudarshan
+  See www.db-book.com for conditions on re-use
+                Database Management System (DBMS)
+
+             DBMS contains information about a particular enterprise
+                       Collection of interrelated data
+                       Set of programs to access the data
+                       An environment that is both convenient and efficient to use
+             Database Applications:
+                       Airlines: reservations, schedules
+                       Universities: registration, grades
+                       Sales: customers, products, purchases, order tracking
+                       Employee records, salaries,
+                       …..
+             Databases touch all aspects of our lives
+
+
+
+
+Database System Concepts - 6th Edition             1.2                ©Silberschatz, Korth and Sudarshan
+                              University Database Example
+             Application program examples
+                       Add new students, instructors, and courses
+                       Register students for courses, and generate class rosters
+                       Assign grades to students, compute grade point averages
+                        (GPA) and generate transcripts
+                       Clicker data: record attendance and quiz answers
+                           Quiz         Q1: Click 1 now!
+             In the early days, database applications were built directly on
+                  top of file systems
+
+
+
+
+Database System Concepts - 6th Edition                      1.3       ©Silberschatz, Korth and Sudarshan
+                            Purpose of Database Systems
+              Drawbacks of using file systems to store data:
+                        Data redundancy and inconsistency
+                           Multiple   file formats, duplication of information in
+                              different files
+                        Difficulty in accessing data
+                           Need         to write a new program to carry out each new task
+                        Data isolation — multiple files and formats
+                        Integrity problems
+                           Integrity  constraints (e.g. “dept_name of student must
+                              be a valid department name”) become “buried” in
+                              program code rather than being stated explicitly
+                           Hard         to add new constraints or change existing ones
+
+
+
+Database System Concepts - 6th Edition                    1.4                ©Silberschatz, Korth and Sudarshan
+                  Purpose of Database Systems (Cont.)
+          Drawbacks of using file systems (cont.)
+              Atomicity of updates
+                
+                Failures may leave database in an inconsistent state with
+                 partial updates carried out
+                Example: Transfer of funds from one account to another
+                 should either complete or not happen at all
+             Concurrent access by multiple users
+                Concurrent accessed needed for performance
+
+                Uncontrolled concurrent accesses can lead to inconsistencies
+                  – Example: Two people reading a balance (say 100) and
+                    updating it by withdrawing money (say 50 each) at the
+                    same time
+             Security problems
+                Hard to provide user access to some, but not all, data
+
+          Database systems offer solutions to all the above problems
+
+Database System Concepts - 6th Edition     1.5               ©Silberschatz, Korth and Sudarshan
+                                         Instances and Schemas
+             Similar to types and variables in programming languages
+             Schema – the logical structure of the database
+                       Analogous to type information of a variable in a program
+                       Physical schema: database design at the physical level
+                             E.g. data storage structures, indices for fast access
+                       Logical schema: database design at the logical level
+             Instance – the actual content of the database at a particular point in
+                  time
+                       Analogous to the value of a variable
+             Physical Data Independence – the ability to modify the physical
+                  schema without changing the logical schema
+                       Applications depend on the logical schema
+
+
+
+
+Database System Concepts - 6th Edition                  1.6                    ©Silberschatz, Korth and Sudarshan
+                                         Data Models
+              A collection of tools for describing
+                        Data
+                        Data relationships
+                        Data semantics
+                        Data constraints
+              Relational model
+              Entity-Relationship data model (mainly for database design)
+              Object-based data models (Object-oriented and Object-
+                   relational)
+              Semistructured data model (XML)
+              Other older models:
+                        Network model
+                        Hierarchical model
+
+
+
+Database System Concepts - 6th Edition        1.7               ©Silberschatz, Korth and Sudarshan
+                                         Relational Model
+             Relational model (Chapter 2)
+                                                                 Columns
+             Example of tabular data in the relational model
+
+
+
+                                                                              Rows
+
+
+
+
+Database System Concepts - 6th Edition          1.8             ©Silberschatz, Korth and Sudarshan
+                            A Sample Relational Database
+
+
+
+                    instructor
+
+
+
+
+                            department
+
+
+
+
+Database System Concepts - 6th Edition   1.9       ©Silberschatz, Korth and Sudarshan
+                     Data Manipulation Language (DML)
+             Language for accessing and manipulating the data organized
+                  by the appropriate data model
+                       DML also known as query language
+             Two classes of languages
+                       Procedural – user specifies what data is required and how
+                        to get those data
+                       Declarative (nonprocedural) – user specifies what data is
+                        required without specifying how to get those data
+             SQL is the most widely used query language
+
+
+
+
+Database System Concepts - 6th Edition           1.10               ©Silberschatz, Korth and Sudarshan
+                       Data Definition Language (DDL)
+             Specification notation for defining the database schema
+                    Example:create table instructor (
+                                    ID           char(5),
+                                    name         varchar(20),
+                                    dept_name varchar(20),
+                                    salary        numeric(8,2))
+             DDL compiler generates a set of tables
+             Data dictionary contains metadata (i.e., data about data)
+                Database schema
+                   Which tables are present, what are their attributes, …
+
+                Integrity constraints
+                   Which attributes are primary keys, foreign keys, …
+
+
+
+
+Database System Concepts - 6th Edition      1.11                ©Silberschatz, Korth and Sudarshan
+                                         Database Design
+        The process of designing the general structure of the database:
+
+
+         Logical Design – Deciding on the database schema. Database
+              design requires that we find a “good” collection of relation schemas.
+                   Business decision – What attributes should we record in the
+                    database?
+                   Computer Science decision – What relation schemas should we
+                    have and how should the attributes be distributed among the
+                    various relation schemas?
+
+
+         Physical Design – Deciding on the physical layout of the database
+
+
+
+
+Database System Concepts - 6th Edition          1.12                ©Silberschatz, Korth and Sudarshan
+                                         Database Design?
+             Is there any problem with this design?
+
+
+
+
+         Quiz Q2: The problem is: (1) missing information (2) repeated information
+              (3) there is no problem (4) these instructor salaries are too low
+
+
+Database System Concepts - 6th Edition           1.13                   ©Silberschatz, Korth and Sudarshan
+                                         Design Approaches
+             Normalization Theory (Chapter 8)
+                       Formalize what designs are bad, and test for them
+             Entity Relationship Model (Chapter 7)
+                       Models an enterprise as a collection of entities and relationships
+                             Entity: a “thing” or “object” in the enterprise that is
+                              distinguishable from other objects
+                                – Described by a set of attributes
+                             Relationship: an association among several entities
+                       Represented diagrammatically by an entity-relationship diagram:
+
+
+
+
+Database System Concepts - 6th Edition                    1.14                     ©Silberschatz, Korth and Sudarshan
+                                  Database System Internals
+
+                                                            Query Processor
+
+
+
+
+                                                             Storage Manager
+
+
+
+
+                                                              Storage
+
+
+
+
+Database System Concepts - 6th Edition       1.15       ©Silberschatz, Korth and Sudarshan
+                              History of Database Systems
+             1950s and early 1960s:
+                       Data processing using magnetic tapes for storage
+                             Tapes provide only sequential access
+                       Punched cards for input
+             Late 1960s and 1970s:
+                       Hard disks allow direct access to data
+                       Network and hierarchical data models in widespread use
+                       Ted Codd defines the relational data model
+                             Would win the ACM Turing Award for this work
+                             IBM Research begins System R prototype
+                             UC Berkeley begins Ingres prototype
+                       High-performance (for the era) transaction processing
+
+
+
+
+Database System Concepts - 6th Edition                1.16                   ©Silberschatz, Korth and Sudarshan
+                                         History (cont.)
+           1980s:
+                   Research relational prototypes evolve into commercial systems
+                      SQL becomes industrial standard
+                   Parallel and distributed database systems
+                  
+               Object-oriented database systems
+           1990s:
+              Large decision support and data-mining applications
+              Large multi-terabyte parallel data warehouses
+                  
+                Emergence of Web commerce
+           Early 2000s:
+              XML and XQuery standards
+              Automated database administration
+           Later 2000s: Big Data
+              massively parallel storage systems
+                  Google BigTable, Yahoo PNuts, Amazon, ..
+              Parallel data analysis, using MapReduce
+
+
+Database System Concepts - 6th Edition           1.17                  ©Silberschatz, Korth and Sudarshan
+  End of Chapter 1
+
+
+
+
+Database System Concepts, 6th Ed.
+     ©Silberschatz, Korth and Sudarshan
+See www.db-book.com for conditions on re-use
+Database Users and Administrators
+
+
+
+
+                 Database
+
+       Database System Concepts, 6th Ed.
+           ©Silberschatz, Korth and Sudarshan
+      See www.db-book.com for conditions on re-use
+

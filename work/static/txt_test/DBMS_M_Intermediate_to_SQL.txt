@@ -1,0 +1,552 @@
+Chapter 4: Intermediate SQL
+
+
+
+
+    Database System Concepts, 6th Ed.
+         ©Silberschatz, Korth and Sudarshan
+    See www.db-book.com for conditions on re-use
+                              Chapter 4: Intermediate SQL
+
+             Join Expressions
+             Views
+             Transactions
+             Integrity Constraints
+             SQL Data Types and Schemas
+             Authorization
+
+
+
+
+Database System Concepts - 6th Edition    4.2        ©Silberschatz, Korth and Sudarshan
+                                         Joined Relations
+
+            Join operations take two relations and return as a result
+                 another relation.
+            A join operation is a Cartesian product which requires that
+                 tuples in the two relations match (under some condition).
+                 It also specifies the attributes that are present in the result
+                 of the join
+            The join operations are typically used as subquery
+                 expressions in the from clause
+
+
+
+
+Database System Concepts - 6th Edition            4.3                   ©Silberschatz, Korth and Sudarshan
+                                  Join operations – Example
+             Relation course
+
+
+
+
+             Relation prereq
+
+
+
+
+              Observe that
+                        prereq information is missing for CS-315 and
+                        course information is missing for CS-437
+Database System Concepts - 6th Edition           4.4                   ©Silberschatz, Korth and Sudarshan
+                                         Left Outer Join
+
+                  course natural left outer join prereq
+
+
+
+
+Database System Concepts - 6th Edition         4.5         ©Silberschatz, Korth and Sudarshan
+                                         Right Outer Join
+
+             course natural right outer join prereq
+
+
+
+
+Database System Concepts - 6th Edition          4.6         ©Silberschatz, Korth and Sudarshan
+                                         Full Outer Join
+
+              course natural full outer join prereq
+
+
+
+
+Database System Concepts - 6th Edition         4.7         ©Silberschatz, Korth and Sudarshan
+                                         Joined Relations
+            Join operations take two relations and return as a result
+                 another relation.
+            These additional operations are typically used as subquery
+                 expressions in the from clause
+            Join condition – defines which tuples in the two relations
+                 match, and what attributes are present in the result of the join.
+            Join type – defines how tuples in each relation that do not
+                 match any tuple in the other relation (based on the join
+                 condition) are treated.
+
+
+
+
+Database System Concepts - 6th Edition           4.8                  ©Silberschatz, Korth and Sudarshan
+                              Joined Relations – Examples
+
+              course inner join prereq on
+                  course.course_id = prereq.course_id
+
+
+
+
+             course left outer join prereq on
+              course.course_id = prereq.course_id
+
+
+
+
+Database System Concepts - 6th Edition        4.9       ©Silberschatz, Korth and Sudarshan
+                              Joined Relations – Examples
+            course natural right outer join prereq
+
+
+
+
+             course right outer join prereq using (course_id)
+
+
+
+
+Database System Concepts - 6th Edition     4.10                  ©Silberschatz, Korth and Sudarshan
+            Quiz Q1: Are ( r left outer join s) and (s right outer join r)
+            the same, if we ignore the order of the columns in the result?
+             (1) Yes
+             (2) No
+             (3) depends on the schema of r and s
+             (4) none of the above
+
+
+          Quiz Q2: Which of the following give exactly the same result,
+          given relations r(A,B) and s(B, C)
+             (A) r natural join s (B) r join s using (B) (C) r join s on (r.B=s.B)
+          (1) A and B
+          (2) A and C
+          (3) B and C
+          (4) all three
+
+Database System Concepts - 6th Edition       4.11                 ©Silberschatz, Korth and Sudarshan
+                                          View Definition
+             Any relation that is not of the conceptual model but is made
+                  visible to a user as a “virtual relation” is called a view.
+             A view is defined using the create view statement which has
+                  the form
+                                create view v as < query expression >
+
+                  where <query expression> is any legal SQL expression. The
+                  view name is represented by v.
+             Once a view is defined, the view name can be used to refer to
+                  the virtual relation that the view generates.
+             View definition is not the same as creating a new relation by
+                  evaluating the query expression
+                       Rather, a view definition causes the saving of an expression;
+                        the expression is substituted into queries using the view.
+
+
+Database System Concepts - 6th Edition              4.12                ©Silberschatz, Korth and Sudarshan
+                                         Example Views
+         A view of instructors without their salary
+               create view faculty as
+                 select ID, name, dept_name
+                 from instructor
+         Find all instructors in the Biology department
+               select name
+               from faculty
+               where dept_name = „Biology‟
+         Create a view of department salary totals
+                create view departments_total_salary(dept_name, total_salary) as
+                   select dept_name, sum (salary)
+                   from instructor
+                  group by dept_name;
+
+
+
+
+Database System Concepts - 6th Edition        4.13              ©Silberschatz, Korth and Sudarshan
+                       Views Defined Using Other Views
+             create view physics_fall_2009 as
+                     select course.course_id, sec_id, building, room_number
+                     from course, section
+                     where course.course_id = section.course_id
+                            and course.dept_name = ‟Physics‟
+                            and section.semester = ‟Fall‟
+                            and section.year = ‟2009‟;
+             create view physics_fall_2009_watson as
+                      select course_id, room_number
+                      from physics_fall_2009
+                      where building= ‟Watson‟;
+
+
+
+
+Database System Concepts - 6th Edition         4.14                ©Silberschatz, Korth and Sudarshan
+                                         View Expansion
+             Expand use of a view in a query/another view
+
+
+                       create view physics_fall_2009_watson as
+                       (select course_id, room_number
+                       from (select course.course_id, building, room_number
+                             from course, section
+                             where course.course_id = section.course_id
+                                and course.dept_name = ‟Physics‟
+                                and section.semester = ‟Fall‟
+                                and section.year = ‟2009‟)
+                       where building= ‟Watson‟;
+
+
+
+
+Database System Concepts - 6th Edition          4.15               ©Silberschatz, Korth and Sudarshan
+                                         View Expansion
+             A way to define the meaning of views defined in terms of other
+                  views.
+             Let view v1 be defined by an expression e1 that may itself
+                  contain uses of view relations.
+             View expansion of an expression repeats the following
+                  replacement step:
+                       repeat
+                         Find any view relation vi in e1
+                         Replace the view relation vi by the expression defining vi
+                       until no more view relations are present in e1
+             As long as the view definitions are not recursive, this loop will
+                  terminate
+
+
+
+
+Database System Concepts - 6th Edition            4.16                 ©Silberschatz, Korth and Sudarshan
+                                         Update of a View
+             Add a new tuple to faculty view which we defined earlier
+                           insert into faculty values (‟30765‟, ‟Green‟, ‟Music‟);
+                       We cannot add a tuple directly to a view
+                       Instead the insertion can be done by inserting the tuple
+                                    (‟30765‟, ‟Green‟, ‟Music‟, null)
+                          into the instructor relation
+
+
+
+
+Database System Concepts - 6th Edition               4.17                ©Silberschatz, Korth and Sudarshan
+             Some Updates cannot be Translated Uniquely
+             create view instructor_info as
+                         select ID, name, building
+                         from instructor, department
+                         where instructor.dept_name= department.dept_name;
+             insert into instructor_info values (‟69987‟, ‟White‟, ‟Taylor‟);
+                           which         department, if multiple departments in Taylor?
+                           what         if no department is in Taylor?
+             Most SQL implementations allow updates only on simple views
+                       The from clause has only one database relation.
+                       The select clause contains only attribute names of the
+                        relation, and does not have any expressions, aggregates, or
+                        distinct specification.
+                       Any attribute not listed in the select clause can be set to null
+                       The query does not have a group by or having clause.
+
+Database System Concepts - 6th Edition                     4.18               ©Silberschatz, Korth and Sudarshan
+                                         And Some Not at All
+             create view history_instructors as
+                     select *
+                     from instructor
+                     where dept_name= ‟History‟;
+             What happens if we insert (‟25566‟, ‟Brown‟, ‟Biology‟, 100000)
+                  into history_instructors?
+
+
+                   Quiz Q3: The insertion into the view
+                   (1)cannot be done by any update to instructor
+                   (2)can be done by a simple insert to instructor
+                   (3)can be done, for any department other than History
+                   (4)none of the above
+
+
+
+
+Database System Concepts - 6th Edition           4.19              ©Silberschatz, Korth and Sudarshan
+                                         Transactions
+             Unit of work
+             Atomic transaction
+                       either fully executed or rolled back as if it never occurred
+             Isolation from concurrent transactions
+             Transactions begin implicitly
+                       Ended by commit work or rollback work
+             But default on most databases: each SQL statement commits
+                  automatically
+                       Can turn off auto commit for a session (e.g. using API)
+                       In SQL:1999, can use: begin atomic …. end
+
+
+
+
+Database System Concepts - 6th Edition             4.20                  ©Silberschatz, Korth and Sudarshan
+                   Integrity Constraints on a Single Relation
+
+              not null
+              primary key
+              unique
+              check (P), where P is a predicate
+
+
+
+
+Database System Concepts - 6th Edition     4.21     ©Silberschatz, Korth and Sudarshan
+                        Not Null and Unique Constraints
+
+              not null
+                        Declare name and budget to be not null
+                             name varchar(20) not null
+                             budget numeric(12,2) not null
+              unique ( A1, A2, …, Am)
+                        The unique specification states that the attributes A1, A2, …
+                         Am
+                         form a candidate key.
+                        Candidate keys are permitted to be null (in contrast to primary
+                         keys).
+
+
+
+
+Database System Concepts - 6th Edition             4.22                 ©Silberschatz, Korth and Sudarshan
+                                         The check clause
+
+              check (P)
+                   where P is a predicate
+
+                  Example: ensure that semester is one of fall, winter, spring
+                  or summer:
+
+                  create table section (
+                     course_id varchar (8),
+                     sec_id varchar (8),
+                     semester varchar (6),
+                     year numeric (4,0),
+                     building varchar (15),
+                     room_number varchar (7),
+                     time slot id varchar (4),
+                     primary key (course_id, sec_id, semester, year),
+                     check (semester in (‟Fall‟, ‟Winter‟, ‟Spring‟, ‟Summer‟))
+                  );
+Database System Concepts - 6th Edition          4.23                  ©Silberschatz, Korth and Sudarshan
+                       Cascading Actions in Referential Integrity
+
+              create table course (
+                       course_id char(5) primary key,
+                       title     varchar(20),
+                       dept_name varchar(20) references department
+                  )
+              create table course (
+                       …
+                       dept_name varchar(20),
+                       foreign key (dept_name) references department
+                              on delete cascade
+                              on update cascade,
+                       ...
+                  )
+              alternative actions to cascade: set null, set default
+
+
+
+
+Database System Concepts - 6th Edition         4.24              ©Silberschatz, Korth and Sudarshan
+                         Integrity Constraint Violation During
+                                     Transactions
+             E.g.
+                    create table person (
+                      ID char(10),
+                      name char(40),
+                      mother char(10),
+                      father char(10),
+                      primary key ID,
+                      foreign key father references person,
+                      foreign key mother references person)
+             How to insert a tuple without causing constraint violation?
+                       insert father and mother of a person before inserting person
+                       OR, set father and mother to null initially, update after
+                        inserting all persons (not possible if father and mother
+                        attributes declared to be not null)
+                       OR defer constraint checking (next slide)
+
+Database System Concepts - 6th Edition             4.25                  ©Silberschatz, Korth and Sudarshan
+                       Deferred Checking of Constraints
+       What if mother or father is declared not null?
+                 constraint father_ref foreign key father references person,
+                  constraint mother_ref foreign key mother references person)
+                 set constraints father_ref, mother_ref deferred
+       Deferred constraints are checked at end of transaction
+                 Even if father tuple does not exist when a particular person is
+                  inserted, no violation provided father is inserted before transaction
+                  commits.
+       Particularly useful for cyclic references
+                 E.g. add attribute spouse to a married_person relation as follows:
+                     spouse char(10) not null;
+                     constraint spouse_ref foreign key spouse
+                              references married_person;
+                 Since spouse cannot be null, without deferred constraints we
+                  cannot insert any tuples into married_person
+Database System Concepts - 6th Edition          4.26                  ©Silberschatz, Korth and Sudarshan
+                                     Complex Check Clauses
+             check (time_slot_id in (select time_slot_id from time_slot))
+                       why not use a foreign key here?
+             Every section has at least one instructor teaching the section.
+                       how to write this?
+             Unfortunately: subquery in check clause not supported by
+                  pretty much any database
+                       Alternative: triggers (later)
+             create assertion <assertion-name> check <predicate>;
+                       Also not supported by anyone
+
+
+
+
+Database System Concepts - 6th Edition                  4.27     ©Silberschatz, Korth and Sudarshan
+                                         Built-in Data Types in SQL
+            date: Dates, containing a (4 digit) year, month and date
+                      Example: date „2005-7-27‟
+            time: Time of day, in hours, minutes and seconds.
+                      Example: time „09:00:30‟            time „09:00:30.75‟
+            timestamp: date plus time of day
+                      Example: timestamp „2005-7-27 09:00:30.75‟
+            interval: period of time
+                      Example: interval „1‟ day
+                      Subtracting a date/time/timestamp value from another gives
+                       an interval value
+               Interval values can be added to date/time/timestamp values
+                  
+      Quiz Q4: The expression
+        date `2010-12-14‟ + (date „2010-12-01‟ – date „2010-11-30‟)
+      is (1) valid and returns a date (2) valid and returns an interval
+         (3) invalid                  (4) none of the above
+Database System Concepts - 6th Edition              4.28                  ©Silberschatz, Korth and Sudarshan
+                                         Index Creation
+             create table student
+              (ID varchar (5),
+              name varchar (20) not null,
+              dept_name varchar (20),
+              tot_cred numeric (3,0) default 0,
+              primary key (ID))
+             create index studentID_index on student(ID)
+             Indices are data structures used to speed up access to records
+              with specified values for index attributes
+                e.g. select *
+                      from student
+                      where ID = „12345‟
+                 can be executed by using the index to find the required
+                  record, without looking at all records of student
+               More on indices in Chapter 11
+
+
+
+Database System Concepts - 6th Edition        4.29             ©Silberschatz, Korth and Sudarshan
+                                         Large Objects
+             Database restrict the size of char and varchar types
+                       typical limit is less than 4KB
+             Large object types can be used instead to store large sized
+                  data items such as text, images, videos etc.
+             Character large object (clob) and binary large object (blob)
+                       book review clob(10KB)
+                       image blob(10MB)
+                       movie blob(2GB
+
+
+
+
+Database System Concepts - 6th Edition              4.30         ©Silberschatz, Korth and Sudarshan
+                     Authorization Specification in SQL
+
+              The grant statement is used to confer authorization
+                           grant <privilege list>
+                           on <relation name or view name> to <user list>
+              <user list> is:
+                        a user-id
+                        public, which allows all valid users the privilege granted
+                        A role (more on this later)
+              Granting a privilege on a view does not imply granting any
+                  privileges on the underlying relations.
+              The grantor of the privilege must already hold the privilege on
+                  the specified item (or be the database administrator).
+
+
+
+
+Database System Concepts - 6th Edition                 4.31             ©Silberschatz, Korth and Sudarshan
+                                            Privileges in SQL
+
+              select: allows read access to relation,or the ability to query
+                  using the view
+                        Example: grant users U1, U2, and U3 select
+                         authorization on the branch relation:
+                                         grant select on instructor to U1, U2, U3
+              insert: the ability to insert tuples
+              update: the ability to update using the SQL update
+                  statement
+              delete: the ability to delete tuples.
+              all privileges: used as a short form for all the allowable
+                  privileges
+
+
+
+
+Database System Concepts - 6th Edition                   4.32                 ©Silberschatz, Korth and Sudarshan
+                           Revoking Authorization in SQL
+
+              The revoke statement is used to revoke authorization.
+                    revoke <privilege list>
+                    on <relation name or view name> from <user list>
+              Example:
+                    revoke select on branch from U1, U2, U3
+              <privilege-list> may be all to revoke all privileges the revokee
+                  may hold.
+              If <revokee-list> includes public, all users lose the privilege
+                  except those granted it explicitly.
+              If the same privilege was granted twice to the same user by
+                  different grantees, the user may retain the privilege after the
+                  revocation.
+              All privileges that depend on the privilege being revoked are
+                  also revoked.
+
+Database System Concepts - 6th Edition           4.33                 ©Silberschatz, Korth and Sudarshan
+                              Other Authorization Features
+             references privilege to create foreign key
+                       grant reference (dept_name) on department to Mariano;
+                       why is this required?
+             transfer of privileges
+                       grant select on department to Amit with grant option;
+                       revoke select on department from Amit, Satoshi cascade;
+                       revoke select on department from Amit, Satoshi restrict;
+             Etc. read Section 4.6 for more details we have omitted here.
+
+
+
+
+Database System Concepts - 6th Edition           4.34               ©Silberschatz, Korth and Sudarshan
+                                         End of Chapter
+
+
+
+
+Database System Concepts - 6th Edition          4.35      ©Silberschatz, Korth and Sudarshan
+                                         Referential Integrity
+
+              Ensures that a value that appears in one relation for a given
+                  set of attributes also appears for a certain set of attributes in
+                  another relation.
+                        Example: If “Biology” is a department name appearing in
+                         one of the tuples in the instructor relation, then there exists
+                         a tuple in the department relation for “Biology”.
+              Let A be a set of attributes. Let R and S be two relations that
+                  contain attributes A and where A is the primary key of S. A is
+                  said to be a foreign key of R if for any values of A appearing
+                  in R these values also appear in S.
+
+
+
+
+Database System Concepts - 6th Edition              4.36                  ©Silberschatz, Korth and Sudarshan
+

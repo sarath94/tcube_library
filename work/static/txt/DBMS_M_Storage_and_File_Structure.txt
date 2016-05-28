@@ -1,0 +1,508 @@
+Chapter 10: Storage and File Structure
+
+
+
+
+          Database System Concepts, 6th Ed.
+              ©Silberschatz, Korth and Sudarshan
+         See www.db-book.com for conditions on re-use
+                 Chapter 10: Storage and File Structure
+
+               Overview of Physical Storage Media
+               Magnetic Disks
+               RAID
+               Tertiary Storage
+               Storage Access
+               File Organization
+               Organization of Records in Files
+               Data-Dictionary Storage
+
+
+
+
+Database System Concepts - 6th Edition         10.2   ©Silberschatz, Korth and Sudarshan
+                                         Storage Hierarchy
+
+        Primary Storage                                                Volatile
+                                                                       Storage
+
+
+
+
+                                                                              Non-
+       Secondary
+                                                                              -Volatile
+       Storage
+                                                                              Storage
+
+
+
+
+   Tertiary
+    Storage
+
+
+Database System Concepts - 6th Edition          10.3         ©Silberschatz, Korth and Sudarshan
+                          Magnetic Hard Disk Mechanism
+
+
+
+
+       NOTE: Diagram is schematic, and simplifies the structure of actual disk drives
+Database System Concepts - 6th Edition          10.4                   ©Silberschatz, Korth and Sudarshan
+                          Performance Measures of Disks
+                Access time – the time it takes from when a read or write request is
+                     issued to when data transfer begins. Consists of:
+                     Seek time – time it takes to reposition the arm over the correct
+                      
+                     track.
+                        4 to 10 milliseconds on typical disks
+                   Rotational latency – time it takes for the sector to be accessed to
+                     appear under the head.
+                        4 to 11 milliseconds on typical disks (5400 to 15000 r.p.m.)
+                Data-transfer rate – the rate at which data can be retrieved from or
+                 stored to the disk.
+                   25 to 100 MB per second max rate, lower for inner tracks
+
+
+
+
+Database System Concepts - 6th Edition              10.5                 ©Silberschatz, Korth and Sudarshan
+                            Performance Measures (Cont.)
+
+               Mean time to failure (MTTF) – the average time the disk is
+                    expected to run continuously without any failure.
+                         Typically 3 to 5 years
+                         Probability of failure of new disks is quite low, corresponding to a
+                          ―theoretical MTTF‖ of 500,000 to 1,200,000 hours for a new disk
+                               E.g., an MTTF of 1,200,000 hours for a new disk means that
+                                given 1000 relatively new disks, on an average one will fail
+                                every 1200 hours
+                         MTTF decreases as disk ages
+
+
+
+
+Database System Concepts - 6th Edition                  10.6                   ©Silberschatz, Korth and Sudarshan
+                                         Flash Storage
+             NOR flash vs NAND flash
+             NAND flash
+                    used widely for storage, since it is much cheaper than NOR flash
+                    requires page-at-a-time read (page: 512 bytes to 4 KB)
+                    transfer rate around 20 MB/sec
+                       solid state disks: use multiple flash storage devices to provide
+                        higher transfer rate of 100 to 200 MB/sec
+                       erase is very slow (1 to 2 millisecs)
+                          erase block contains multiple pages
+                          remapping of logical page addresses to physical page addresses
+                           avoids waiting for erase
+                            – translation table tracks mapping
+                                 » also stored in a label field of flash page
+                            – remapping carried out by flash translation layer
+                          after 100,000 to 1,000,000 erases, erase block becomes
+                           unreliable and cannot be used
+                            – wear leveling
+Database System Concepts - 6th Edition             10.7                 ©Silberschatz, Korth and Sudarshan
+                                                 RAID
+        RAID: Redundant Arrays of Independent Disks
+                  high capacity and high speed by using multiple disks in parallel,
+                  high reliability by storing data redundantly, so that data can be recovered
+                   even if a disk fails
+        E.g. a system with 100 disks, each with MTTF of 100,000 hours (approx. 11
+            years), will have a system MTTF of 1000 hours (approx. 41 days)
+                  Techniques for using redundancy to avoid data loss are critical with large
+                   numbers of disks
+
+
+
+
+Database System Concepts - 6th Edition              10.8                   ©Silberschatz, Korth and Sudarshan
+                 Improvement of Reliability via Redundancy
+
+               Redundancy – store extra information that can be used to rebuild
+                information lost in a disk failure
+               E.g., Mirroring (or shadowing)
+                   Duplicate every disk. Logical disk consists of two physical disks.
+                   Every write is carried out on both disks
+                       Reads can take place from either disk
+                            
+                  If one disk in a pair fails, data still available in the other
+                      Data loss would occur only if a disk fails, and its mirror disk
+                       also fails before the system is repaired
+               Mean time to data loss depends on mean time to failure,
+                and mean time to repair
+                  E.g. MTTF of 100,000 hours, mean time to repair of 10 hours
+                   gives mean time to data loss of 500*106 hours (or 57,000 years)
+                   for a mirrored pair of disks (ignoring dependent failure modes)
+
+
+
+
+Database System Concepts - 6th Edition           10.9                   ©Silberschatz, Korth and Sudarshan
+                Improvement in Performance via Parallelism
+
+             Two main goals of parallelism in a disk system:
+                    1. Load balance multiple small accesses to increase throughput
+                    2. Parallelize large accesses to reduce response time.
+             Improve transfer rate by striping data across multiple disks.
+             Block-level striping – with n disks, block i of a file goes to disk (i mod
+                  n) + 1
+                       Requests for different blocks can run in parallel if the blocks reside
+                        on different disks
+                       A request for a long sequence of blocks can utilize all disks in
+                        parallel
+             Parity blocks – xor of bits of corresponding blocks
+                       When writing data to a block, corresponding parity bits must also be
+                        computed and written to a parity block
+                       To recover data in a damaged disk, compute XOR of bits from other
+                        disks (including parity bit disk)
+
+Database System Concepts - 6th Edition                10.10                   ©Silberschatz, Korth and Sudarshan
+                                            RAID Levels
+             Schemes to provide redundancy at lower cost by using disk
+                  striping combined with parity bits
+                        Different RAID organizations, or RAID levels, have differing
+                         cost, performance and reliability characteristics
+               RAID Level 0: Block striping; non-redundant.
+                         Used in high-performance applications where data loss is not critical.
+               RAID Level 1: Mirrored disks with block striping
+                        Offers best write performance.
+                        Popular for applications such as storing log files in a database system.
+
+
+
+
+Database System Concepts - 6th Edition                10.11                  ©Silberschatz, Korth and Sudarshan
+                                         RAID Levels (Cont.)
+             RAID Level 5: Block-Interleaved Distributed Parity; partitions data and
+                  parity among all N + 1 disks
+             E.g., with 5 disks, parity block for nth set of blocks is stored on disk (n
+                  mod 5) + 1, with the data blocks stored on the other 4 disks.
+
+
+
+
+Database System Concepts - 6th Edition             10.12                  ©Silberschatz, Korth and Sudarshan
+                                         Choice of RAID Level
+               Level 1 provides much better write performance than level 5
+                         Level 5 requires at least 2 block reads and 2 block writes to write
+                          a single block, whereas Level 1 only requires 2 block writes
+                         Level 1 preferred for high update environments such as log disks
+               Level 1 had higher storage cost than level 5
+                         When enough disks have been bought to satisfy required rate of
+                          I/O, they often have spare storage capacity
+                               so there is often no extra monetary cost for Level 1!
+               Level 5 is preferred for applications with low update rate,
+                    and large amounts of data
+                    Level 1 is preferred for all other applications
+               RAID levels 2, 3, 4 of academic interest only
+               RAID level 6 uses greater redundancy to deal with multiple disk
+                    failure
+
+
+
+Database System Concepts - 6th Edition                  10.13                  ©Silberschatz, Korth and Sudarshan
+                                           Hardware Issues
+
+                Software RAID: RAID implementations done entirely in software,
+                     with no special hardware support
+                Hardware RAID: RAID implementations with special hardware
+                          Use non-volatile RAM to record writes that are being executed
+                          Data in NV RAM used to detect failure after writing one block
+                           but before writing the second in a mirrored system
+                                Hard to do in software RAID without reading all blocks
+
+
+
+
+Database System Concepts - 6th Edition                  10.14                  ©Silberschatz, Korth and Sudarshan
+                                         Disk Subsystem
+             Disks usually connected directly to computer system
+             In Storage Area Networks (SAN), a large number of disks are
+                  connected by a high-speed network to a number of servers
+             In Network Attached Storage (NAS) networked storage provides a
+                  file system interface using networked file system protocol, instead of
+                  providing a disk system interface
+
+
+
+
+Database System Concepts - 6th Edition             10.15                  ©Silberschatz, Korth and Sudarshan
+           File Organization, Record Organization
+                    and Storage Access
+
+
+
+
+Database System Concepts - 6th Edition   10.16   ©Silberschatz, Korth and Sudarshan
+                                         File Organization
+
+               The database is stored as a collection of files. Each file is a
+                    sequence of records. A record is a sequence of fields.
+               We first consider fixed length records, then extend to variable
+                    length records.
+
+
+
+
+Database System Concepts - 6th Edition             10.17                     ©Silberschatz, Korth and Sudarshan
+                                         Fixed-Length Records
+               Simple approach:
+                         Store record i starting from byte n  (i – 1), where n is the size of
+                          each record.
+                         Record access is simple but records may cross blocks
+                               Modification: do not allow records to cross block boundaries
+
+
+               Deletion of record i:
+                    alternatives:
+                         move records i + 1, . . ., n
+                          to i, . . . , n – 1
+                         move record n to i
+                         do not move records, but
+                          link all free records on a
+                          free list
+
+
+
+Database System Concepts - 6th Edition                   10.18                  ©Silberschatz, Korth and Sudarshan
+                                                Free Lists
+               Store the address of the first deleted record in the file header.
+               Use this first record to store the address of the second deleted record,
+                    and so on
+               Can think of these stored addresses as pointers since they ―point‖ to
+                    the location of a record.
+               More space efficient representation: reuse space for normal attributes
+                    of free records to store pointers. (No pointers stored in in-use records.)
+
+
+
+
+Database System Concepts - 6th Edition              10.19                   ©Silberschatz, Korth and Sudarshan
+                                    Variable-Length Records
+
+         Variable-length records arise in database systems in several ways:
+                   Storage of multiple record types in a file.
+                   Record types that allow variable lengths for one or more fields such as
+                    strings (varchar)
+                   Record types that allow repeating fields (used in some older data
+                    models).
+         Attributes are stored in order
+         Variable length attributes represented by fixed size (offset, length), with
+             actual data stored after all fixed length attributes
+         Null values represented by null-value bitmap
+
+
+
+
+Database System Concepts - 6th Edition               10.20                ©Silberschatz, Korth and Sudarshan
+          Variable-Length Records: Slotted Page Structure
+
+
+
+
+               Slotted page header contains:
+                         number of record entries
+                         end of free space in the block
+                         location and size of each record
+               Records can be moved around within a page to keep them contiguous
+                    with no empty space between them; entry in the header must be
+                    updated.
+               Pointers should not point directly to record — instead they should
+                    point to the entry for the record in header.
+
+
+Database System Concepts - 6th Edition                10.21            ©Silberschatz, Korth and Sudarshan
+                         Organization of Records in Files
+
+             Heap – a record can be placed anywhere in the file where there
+                  is space
+             Sequential – store records in sequential order, based on the
+                  value of the search key of each record
+             Hashing – a hash function computed on some attribute of each
+                  record; the result specifies in which block of the file the record
+                  should be placed
+
+
+
+
+Database System Concepts - 6th Edition              10.22                    ©Silberschatz, Korth and Sudarshan
+                                         Data Dictionary Storage
+              The Data dictionary (also called system catalog) stores
+              metadata; that is, data about data, such as
+               Information about relations
+                      names of relations
+                      names, types and lengths of attributes of each relation
+                       names and definitions of views
+                      integrity constraints
+                   User and accounting information, including passwords
+                   Statistical and descriptive data
+                      number of tuples in each relation
+                   Physical file organization information
+                      How relation is stored (sequential/hash/…)
+                      Physical location of relation
+                   Information about indices (Chapter 11)
+
+
+
+Database System Concepts - 6th Edition             10.23                   ©Silberschatz, Korth and Sudarshan
+            Relational Representation of System Metadata
+
+     Relational
+          representation on
+          disk
+     Specialized data
+          structures
+          designed for
+          efficient access, in
+          memory
+
+
+
+
+Database System Concepts - 6th Edition   10.24   ©Silberschatz, Korth and Sudarshan
+                                         Storage Access
+
+               A database file is partitioned into fixed-length storage units called
+                   blocks. Blocks are units of both storage allocation and data
+                   transfer.
+               Database system seeks to minimize the number of block transfers
+                   between the disk and memory. We can reduce the number of
+                   disk accesses by keeping as many blocks as possible in main
+                   memory.
+               Buffer – portion of main memory available to store copies of disk
+                   blocks.
+               Buffer manager – subsystem responsible for allocating buffer
+                   space in main memory.
+
+
+
+
+Database System Concepts - 6th Edition            10.25                   ©Silberschatz, Korth and Sudarshan
+                               Buffer-Replacement Policies
+               Most operating systems replace the block least recently used
+                    (LRU strategy)
+               Idea behind LRU – use past pattern of block references as a
+                    predictor of future references
+               Queries have well-defined access patterns (such as sequential
+                    scans), and a database system can use the information in a user’s
+                    query to predict future references
+                         LRU can be a bad strategy for certain access patterns involving
+                          repeated scans of data
+                         Mixed strategy with hints on replacement strategy provided
+                          by the query optimizer is preferable
+
+
+
+
+Database System Concepts - 6th Edition               10.26                  ©Silberschatz, Korth and Sudarshan
+                   Buffer-Replacement Policies (Cont.)
+               Pinned block – memory block that is not allowed to be written
+                    back to disk.
+               Toss-immediate strategy – frees the space occupied by a block
+                    as soon as the final tuple of that block has been processed
+               Most recently used (MRU) strategy – system must pin the
+                    block currently being processed. After the final tuple of that block
+                    has been processed, the block is unpinned, and it becomes the
+                    most recently used block.
+               Data dictionary is frequently accessed.
+                         Heuristic: keep data-dictionary blocks in main memory buffer
+               Buffer managers also support forced output of blocks for the
+                    purpose of recovery (more in Chapter 16)
+
+
+
+
+Database System Concepts - 6th Edition               10.27                  ©Silberschatz, Korth and Sudarshan
+End of Chapter 10
+
+
+
+
+Database System Concepts, 6th Ed.
+     ©Silberschatz, Korth and Sudarshan
+See www.db-book.com for conditions on re-use
+              Classification of Physical Storage Media
+
+             Speed with which data can be accessed
+             Cost per unit of data
+             Reliability
+                       data loss on power failure or system crash
+                       physical failure of the storage device
+             Can differentiate storage into:
+                       volatile storage: loses contents when power is switched off
+                       non-volatile storage:
+                             Contents persist even when power is switched off.
+                             Includes secondary and tertiary storage, as well as batter-
+                              backed up main-memory.
+
+
+
+
+Database System Concepts - 6th Edition                 10.29                   ©Silberschatz, Korth and Sudarshan
+                                   Storage Hierarchy (Cont.)
+
+             primary storage: Fastest media but volatile (cache, main
+                  memory).
+             secondary storage: next level in hierarchy, non-volatile,
+                  moderately fast access time
+                       also called on-line storage
+                       E.g. flash memory, magnetic disks
+             tertiary storage: lowest level in hierarchy, non-volatile, slow
+                  access time
+                       also called off-line storage
+                       E.g. magnetic tape, optical storage
+
+
+
+
+Database System Concepts - 6th Edition                 10.30           ©Silberschatz, Korth and Sudarshan
+                                          Magnetic Disks
+               Read-write head
+                         Positioned very close to the platter surface (almost touching it)
+                         Reads or writes magnetically encoded information.
+               Surface of platter divided into circular tracks
+                         Over 50K-100K tracks per platter on typical hard disks
+               Each track is divided into sectors.
+               To read/write a sector
+                         disk arm swings to position head on right track
+                         platter spins continually; data is read/written as sector passes under
+                          head
+               Cylinder i consists of ith track of all the platters
+
+
+
+
+Database System Concepts - 6th Edition                10.31                   ©Silberschatz, Korth and Sudarshan
+                       Deleting record 3 and compacting
+
+
+
+
+Database System Concepts - 6th Edition   10.32   ©Silberschatz, Korth and Sudarshan
+             Deleting record 3 and moving last record
+
+
+
+
+Database System Concepts - 6th Edition   10.33   ©Silberschatz, Korth and Sudarshan
+                                            Buffer Manager
+                  Programs call on the buffer manager when they need a block
+                   from disk.
+                    1.    If the block is already in the buffer, buffer manager returns
+                          the address of the block in main memory
+                    2.    If the block is not in the buffer, the buffer manager
+                          1.    Allocates space in the buffer for the block
+                                1. Replacing (throwing out) some other block, if required,
+                                   to make space for the new block.
+                                2. Replaced block written back to disk only if it was
+                                   modified since the most recent time that it was written
+                                   to/fetched from the disk.
+                          2.    Reads the block from the disk to the buffer, and returns
+                                the address of the block in main memory to requester.
+
+
+
+
+Database System Concepts - 6th Edition                  10.34                     ©Silberschatz, Korth and Sudarshan
+

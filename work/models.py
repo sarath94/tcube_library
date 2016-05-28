@@ -11,7 +11,7 @@ from django.db import models
 
 class Admin(models.Model):
     admin_id = models.CharField(primary_key=True, max_length=10)
-    admin_password = models.CharField(max_length=50, blank=True, null=True)
+    admin_password = models.CharField(max_length=100, blank=True, null=True)
 
     class Meta:
         db_table = 'admin'
@@ -22,9 +22,9 @@ class Admin(models.Model):
 
 class Course(models.Model):
     course_id = models.AutoField(primary_key=True)
-    course_name = models.CharField(unique=True, max_length=45)
+    course_name = models.CharField(unique=True, max_length=100)
     discipline = models.ForeignKey('Discipline')
-    type_of_course = models.CharField(max_length=45, blank=True, null=True)
+    type_of_course = models.CharField(max_length=100, blank=True, null=True)
 
     def __unicode__(self):
         return self.course_name
@@ -35,7 +35,7 @@ class Course(models.Model):
 
 class Discipline(models.Model):
     discipline_id = models.AutoField(primary_key=True)
-    discipline = models.CharField(unique=True, max_length=45)
+    discipline = models.CharField(unique=True, max_length=100)
 
     def __unicode__(self):
         return self.discipline
@@ -45,10 +45,10 @@ class Discipline(models.Model):
 
 class File(models.Model):
     file_id = models.AutoField(primary_key=True)
-    file_type = models.CharField(max_length=45)
+    file_type = models.CharField(max_length=100)
     actual_path = models.FileField(upload_to="files")
-    txt_path = models.CharField(max_length=45)
-    file_name = models.CharField(max_length=45,unique=True)
+    txt_path = models.CharField(max_length=100)
+    file_name = models.CharField(max_length=100,unique=True)
     course_id_fk = models.ForeignKey(Course, db_column='course_id_fk')
 
     def __unicode__(self):
@@ -59,7 +59,7 @@ class File(models.Model):
 
 class Keyword(models.Model):
     file_id_fk = models.ForeignKey(File, db_column='file_id_fk')
-    keyword = models.CharField(max_length=45)
+    keyword = models.CharField(max_length=100)
 
     def __unicode__(self):
         return self.keyword
@@ -70,7 +70,7 @@ class Keyword(models.Model):
 
 class TempKeyword(models.Model):
     file_id_fk = models.ForeignKey(File, db_column='file_id_fk')
-    keyword = models.CharField(max_length=45)
+    keyword = models.CharField(max_length=100)
 
     def __unicode__(self):
         return self.keyword

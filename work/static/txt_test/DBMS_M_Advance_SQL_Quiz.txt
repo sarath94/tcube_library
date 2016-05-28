@@ -1,0 +1,108 @@
+                                         Quiz on Advance SQL
+
+                   Note: The correct answers are highlighted in yellow colour.
+
+
+
+1. Supppose you are given relations r(A,B) with tuples { (a, 10), (b, 20), (c, 30)} and s(A, C) with
+   tuples {(a, x), (c, z)}.
+
+   Then the result of select * from r natural left outer join s is
+
+
+      a.   (a, 10, x) (c, 30, z) (b, 20, null)
+      b.    (a, 10, x) (c, 30, z)
+      c.   (c, 30, z) (a, 10, x)
+      d.   none of the above
+
+
+
+
+2. The query below aims to find the number of instructors in each department. How should I fill in
+   the 2 blanks below, to make sure that departments without instructors are shown with a count of 0?
+
+   select dept_name, count(_______)
+   from department ___________________ instructor
+   group by dept_name
+
+      a) *, natural join
+      b) *, right outer join
+
+      c) ID, left outer join
+      d) *, left outer join
+
+
+
+3. Consider the following two queries
+
+   Q1: select * from department where dept_name in (select dept_name from instructor)
+   Q2: select department.* from department as D join instructor as I on (D.dept_name =
+   I.dept_name)
+   The two queries return the same multiset of values on a particular database instance if:
+
+      a) Each instructor is in exactly one department
+
+      b) Each department has at most one instructor
+      c) Each department has at most two instructors
+      d) They can never return the same multiset of tuples on any database instance.
+4. Match each expression in the left hand side with its result in the right hand side.
+
+       a) r.A = null (when r.A has the null value) ----- unknown
+
+       b) sum(r.A) (when r has 3 tuples, with values 4, 5 and null for r.A)     ---- 9
+
+       c) r.A + 9 (when r.A has the null value) ----- null
+
+       d) (r.A < 5) OR (r.A >= 5), when r.A is null ------ unknown
+
+        e) (r.A < 5) or (r.A is null) or (r.A >= 5) ------- true
+
+
+
+5. Fill in the blanks to make the second query give the same result as the first query
+
+    select * from r where r.A in (select s.C from s where s.B = 5)
+
+    select * from r where r.A exists (select s.C from s where s.B = 5 ___________________)
+
+
+        a. or r.A = s.A
+
+        b. or r.A = s.C
+
+        c. and r.A = s.A
+
+        d. and r.A = s.C
+
+
+
+
+6. Consider the following query with a blank
+
+   select ________, sum(salary)
+   from instructor natural join department
+   group by dept_name, building
+
+   Which all of the following alternatives are syntactically correct for filling in the blank in the query
+   below. Mark all correct answers.
+
+          a.   dept_name, building
+          b.   dept_name
+          c.   building
+          d.   ID, dept_name, building
+7. Select the best matching answer from those below, to fill in the blank in the statement:
+
+   An attribute declared to be a foreign key _______________________
+
+
+
+   a.   Must have its value present in the referenced table, unless the referenced table has a null value.
+   b.   Must have its value present in the referenced table
+   c.   Should not have its value present in the referenced table
+   d.   Must have its value present in the referenced table, unless its value is null
+
+
+
+
+                                    ************************
+

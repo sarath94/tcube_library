@@ -18,10 +18,13 @@ def create_index():
 			#	print(tfile)
 			print "Indexing: ", os.path.join(os.path.abspath(root),tfile)
 			title = tfile
-			with codecs.open(os.path.join(os.path.abspath(root),filepath), "r","utf-8") as f:
-	   			content = f.read()
-			writer.add_document(title=title,content=content)
-			print "Done: ", tfile
+            		try:
+			    with codecs.open(os.path.join(os.path.abspath(root),tfile), "r","utf-8") as f:
+	   			    content = f.read()
+			    writer.add_document(title=unicode(title),content=unicode(content))
+			    print "Done: ", tfile
+            		except:
+                		os.system("rm "+os.path.join(os.path.abspath(root),tfile))
 
 	writer.commit()
 #create_index()
@@ -33,7 +36,7 @@ def update_index(filepath):
 	title = filepath
 	with codecs.open(os.path.join(os.path.abspath(root),filepath), "r","utf-8") as f:
    		content = f.read()
-	writer.add_document(title=title,content=content)
+	writer.add_document(title=unicode(title),content=unicode(content))
 	print "Done: ", filepath
 	writer.commit()
 #update_index('sarat')

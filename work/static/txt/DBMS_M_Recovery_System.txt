@@ -1,0 +1,729 @@
+Chapter 16: Recovery System
+
+
+
+
+     Database System Concepts, 6th Ed.
+          ©Silberschatz, Korth and Sudarshan
+     See www.db-book.com for conditions on re-use
+                             Chapter 16: Recovery System
+              Failure Classification
+              Storage Structure
+              Recovery and Atomicity
+              Log-Based Recovery
+              Remote Backup Systems
+
+
+
+
+Database System Concepts - 6th Edition   16.2       ©Silberschatz, Korth and Sudarshan
+                                         Failure Classification
+        Transaction failure :
+                  Logical errors: transaction cannot complete due to some
+                   internal error condition
+                  System errors: the database system must terminate an active
+                   transaction due to an error condition (e.g., deadlock)
+        System crash: a power failure or other hardware or software failure
+             causes the system to crash.
+                  Fail-stop assumption: non-volatile storage contents are
+                   assumed to not be corrupted by system crash
+                      Database    systems have numerous integrity checks to
+                         prevent corruption of disk data
+        Disk failure: a head crash or similar disk failure destroys all or part
+             of disk storage
+                  Destruction is assumed to be detectable: disk drives use
+                   checksums to detect failures
+Database System Concepts - 6th Edition            16.3               ©Silberschatz, Korth and Sudarshan
+                                         Storage Structure
+             Volatile storage:
+                       does not survive system crashes
+                       examples: main memory, cache memory
+             Nonvolatile storage:
+                       survives system crashes
+                       examples: disk, tape, flash memory,
+                                  non-volatile (battery backed up) RAM
+                       but may still fail, losing data
+             Stable storage:
+                       a mythical form of storage that survives all failures
+                       approximated by maintaining multiple copies on distinct
+                        nonvolatile media (multiple disks locally and at remote site)
+                       See book for more details on how to implement stable storage
+
+Database System Concepts - 6th Edition               16.4                ©Silberschatz, Korth and Sudarshan
+                                         Data Access
+             Physical blocks are those blocks residing on the disk.
+             Buffer blocks are the blocks residing temporarily in main
+                  memory.
+             Block movements between disk and main memory are initiated
+                  through the following two operations:
+                       input(B) transfers the physical block B to main memory.
+                       output(B) transfers the buffer block B to the disk, and
+                        replaces the appropriate physical block there.
+             We assume, for simplicity, that each data item fits in, and is
+                  stored inside, a single block.
+
+
+
+
+Database System Concepts - 6th Edition             16.5                ©Silberschatz, Korth and Sudarshan
+                                     Example of Data Access
+                                                     buffer
+                        Buffer Block A                           input(A)
+                                                      X                               A
+                        Buffer Block B                Y                               B
+                                                                 output(B)
+                                         read(X)
+                                                      write(Y)
+
+                                                          x2
+                                           x1
+                                           y1
+
+                                         work area        work area
+                                         of T1            of T2
+
+                                                       memory                   disk
+
+Database System Concepts - 6th Edition                    16.6               ©Silberschatz, Korth and Sudarshan
+                                         Recovery and Atomicity
+             To ensure atomicity despite failures, we first output information
+                  describing the modifications to stable storage without modifying
+                  the database itself.
+             We study log-based recovery mechanisms in detail
+                       We first present key concepts
+                       And then present the actual recovery algorithm
+             Less used alternative: shadow-paging (brief details in book)
+
+
+
+
+Database System Concepts - 6th Edition            16.7               ©Silberschatz, Korth and Sudarshan
+                                         Log-Based Recovery
+              A log is kept on stable storage.
+                     The log is a sequence of log records, and maintains a
+                      record of update activities on the database.
+                 When transaction Ti starts, it registers itself by writing a
+                       <Ti start>log record
+                 Before Ti executes write(X), a log record
+                         <Ti, X, V1, V2>
+                  is written, where V1 is the value of X before the write (the old
+                  value), and V2 is the value to be written to X (the new value).
+                 When Ti finishes it last statement, the log record <Ti commit> is
+                  written.
+                 Two approaches using logs
+                    Deferred database modification
+                    Immediate database modification
+
+
+
+
+Database System Concepts - 6th Edition          16.8                ©Silberschatz, Korth and Sudarshan
+                       Immediate Database Modification
+             The immediate-modification scheme allows updates of an
+                  uncommitted transaction to be made to the buffer, or the disk
+                  itself, before the transaction commits
+                 Update log record must be written before database item is written
+                     We assume that the log record is output directly to stable
+                      storage
+                     (Will see later that how to postpone log record output)
+                 Output of updated blocks to stable storage can take place at any
+                  time before or after transaction commit
+                 Order in which blocks are output can be different from the order in
+                  which they are written.
+                 The deferred-modification scheme performs updates to
+                  buffer/disk only at the time of transaction commit
+                     Simplifies some aspects of recovery
+                     But has overhead of storing local copy
+
+
+Database System Concepts - 6th Edition          16.9                ©Silberschatz, Korth and Sudarshan
+                                         Transaction Commit
+             A transaction is said to have committed when its commit log
+                  record is output to stable storage
+                       all previous log records of the transaction must have been
+                        output already
+             Writes performed by a transaction may still be in the buffer
+                  when the transaction commits, and may be output later
+                       Why allow outputs (writes to disk) to be postoned?
+                           Reduces     number of disk writes required to commit a
+                              transaction  faster commit, earlier release of locks
+                           Frequently   updated pages will be written out to disk less
+                              often overall (multiple updates written out together).
+
+
+
+
+Database System Concepts - 6th Edition               16.10                ©Silberschatz, Korth and Sudarshan
+              Immediate Database Modification Example
+            Log                            Write                 Output
+
+            <T0 start>
+            <T0, A, 1000, 950>
+            <To, B, 2000, 2050>
+                                         A = 950
+                                         B = 2050
+            <T0 commit>
+            <T1 start>
+            <T1, C, 700, 600>
+                                                                      BC output before T1
+                                         C = 600                           commits
+                                                            BB , BC
+            <T1 commit>
+                                                            BA
+                                                                      BA output after T0
+             Note: BX denotes block containing X.                        commits
+
+
+
+Database System Concepts - 6th Edition              16.11                 ©Silberschatz, Korth and Sudarshan
+                     Concurrency Control and Recovery
+          With concurrent transactions, all transactions share a single disk
+               buffer and a single log
+                    A buffer block can have data items updated by one or more
+                     transactions
+          We assume that if a transaction Ti has modified an item, no other
+               transaction can modify the same item until Ti has committed or
+               aborted
+                    i.e. the updates of uncommitted transactions should not be
+                     visible to other transactions
+                        Otherwise   how to perform undo if T1 updates A, then T2
+                           updates A and commits, and finally T1 has to abort?
+                    Can be ensured by obtaining exclusive locks on updated items
+                     and holding the locks till end of transaction (strict two-phase
+                     locking)
+          Log records of different transactions may be interspersed in the log.
+
+Database System Concepts - 6th Edition            16.12               ©Silberschatz, Korth and Sudarshan
+                                 Undo and Redo Operations
+             Undo of a log record <Ti, X, V1, V2> writes the old value V1 to X
+             Redo of a log record <Ti, X, V1, V2> writes the new value V2 to
+                  X
+             Undo and Redo of Transactions
+                       undo(Ti) restores the value of all data items updated by Ti to
+                        their old values, going backwards from the last log record for
+                        Ti
+                           each   time a data item X is restored to its old value V a
+                              special log record <Ti , X, V> is written out
+                           when    undo of a transaction is complete, a log record
+                              <Ti abort> is written out.
+                       redo(Ti) sets the value of all data items updated by Ti to the
+                        new values, going forward from the first log record for Ti
+                           No      logging is done in this case
+
+Database System Concepts - 6th Edition                 16.13              ©Silberschatz, Korth and Sudarshan
+                Undo and Redo on Recovering from Failure
+
+      When recovering after failure:
+                Transaction Ti needs to be undone if the log
+                    contains            the record <Ti start>,
+                    but     does not contain either a <Ti commit> or a <Ti abort>.record
+                Transaction Ti needs to be redone if the log
+                    contains            the records <Ti start>
+                    and      contains the record <Ti commit> or <Ti abort>
+      Note that If transaction Ti was undone earlier and the <Ti abort> record
+           written to the log, and then a failure occurs, on recovery from failure Ti
+           is redone
+                such a redo redoes all the original actions including the steps
+                 that restored old values
+                    Known          as repeating history
+                    Seems          wasteful, but simplifies recovery greatly
+Database System Concepts - 6th Edition                     16.14                ©Silberschatz, Korth and Sudarshan
+                   Immediate DB Modification Recovery
+                               Example
+        Below we show the log as it appears at three instances of time.
+
+
+
+
+      Recovery actions in each case above are:
+      (a) undo (T0): B is restored to 2000 and A to 1000, and log records
+         <T0, B, 2000>, <T0, A, 1000>, <T0, abort> are written out
+      (b) redo (T0) and undo (T1): A and B are set to 950 and 2050 and C is
+         restored to 700. Log records <T1, C, 700>, <T1, abort> are written out.
+      (c) redo (T0) and redo (T1): A and B are set to 950 and 2050
+           respectively. Then C is set to 600
+Database System Concepts - 6th Edition     16.15               ©Silberschatz, Korth and Sudarshan
+                                         Checkpoints
+         Redoing/undoing all transactions recorded in the log can be very
+              slow
+                1.   processing the entire log is time-consuming if the system has
+                     run for a long time
+                2.   we might unnecessarily redo transactions which have already
+                     output their updates to the database.
+         Streamline recovery procedure by periodically performing
+              checkpointing
+                    recovery only needs to look at parts of the log after the
+                     checkpoint
+                     plus just a little bit before the checkpoint corresponding to
+                     transactions that were active at the time of checkpoint.
+
+
+
+
+Database System Concepts - 6th Edition            16.16                 ©Silberschatz, Korth and Sudarshan
+                                         Checkpoints
+         Checkpointing
+                1.   Output all log records currently residing in main memory onto
+                     stable storage.
+                2.   Output all modified buffer blocks to the disk.
+                3.   Write a log record < checkpoint L> onto stable storage
+                     where L is a list of all transactions active at the time of
+                     checkpoint.
+                    All updates are stopped while doing checkpointing
+         (A less intrusive version of checkpointing is described in book)
+
+
+
+
+Database System Concepts - 6th Edition            16.17                 ©Silberschatz, Korth and Sudarshan
+                                         Checkpoints (Cont.)
+             During recovery we need to consider only the most recent
+              transaction Ti that started before the checkpoint, and
+              transactions that started after Ti.
+               1. Scan backwards from end of log to find the most recent
+                  <checkpoint L> record
+                Only transactions that are in L or started after the checkpoint
+                  need to be redone or undone
+                Transactions that committed or aborted before the
+                  checkpoint already have all their updates output to stable
+                  storage.
+             Some earlier part of the log may be needed for undo operations
+               1. Continue scanning backwards till a record <Ti start> is found
+                  for every transaction Ti in L.
+                Parts of log prior to earliest <Ti start> record above are not
+                  needed for recovery, and can be erased whenever desired.
+
+
+Database System Concepts - 6th Edition           16.18          ©Silberschatz, Korth and Sudarshan
+                                     Example of Checkpoints
+
+                                         Tc                                Tf
+                               T1
+                                         T2
+                                                       T3
+                                                                      T4
+                                                  T5
+
+                                     checkpoint                     system failure
+
+              T1 can be ignored (updates already output to disk due to checkpoint)
+              T2 (steps after checkpoint only) and T3 redone.
+              T4 , T5 undone
+
+
+
+
+Database System Concepts - 6th Edition                      16.19                    ©Silberschatz, Korth and Sudarshan
+                                         Recovery Algorithm
+             So far: we covered key concepts
+             Now: we present the components of the basic recovery algorithm
+                   Earlier editions had multiple recovery algorithms; in this edition
+                   we have reduced the number to simplify your life!
+             In book: we present extensions to allow more concurrency
+
+
+
+Database System Concepts - 6th Edition           16.20                ©Silberschatz, Korth and Sudarshan
+                                          Recovery Algorithm
+           Logging (during normal operation):
+                      <Ti start> at transaction start
+                      <Ti, Xj, V1, V2> for each update, and
+                    <Ti commit> at transaction end
+           Transaction rollback (during normal operation)
+                    Let Ti be the transaction to be rolled back
+                    Scan log backwards from the end, and for each log record of Ti
+                     of the form <Ti, Xj, V1, V2>
+                        perform         the undo by writing V1 to Xj,
+                        write       a log record <Ti , Xj, V1>
+                             – such log records are called compensation log records
+                    Once the record <Ti start> is found stop the scan and write the
+                     log record <Ti abort>
+
+Database System Concepts - 6th Edition                   16.21           ©Silberschatz, Korth and Sudarshan
+                                 Recovery Algorithm (Cont.)
+             Recovery from failure: Two phases
+                        Redo phase: replay updates of all transactions, whether
+                         they committed, aborted, or are incomplete
+                        Undo phase: undo all incomplete transactions
+             Redo phase:
+                    1.   Find last <checkpoint L> record, and set undo-list to L.
+                    2.   Scan forward from above <checkpoint L> record
+                          1.    Whenever a record <Ti, Xj, V1, V2> is found, redo it by
+                                writing V2 to Xj
+                          2.    Whenever a log record <Ti start> is found, add Ti to
+                                undo-list
+                          3.    Whenever a log record <Ti commit> or <Ti abort> is
+                                found, remove Ti from undo-list
+
+
+Database System Concepts - 6th Edition               16.22               ©Silberschatz, Korth and Sudarshan
+                                 Recovery Algorithm (Cont.)
+          Undo phase:
+               Scan log backwards from end
+                 1.
+                1. Whenever a log record <Ti, Xj, V1, V2> is found where Ti is
+                   in undo-list perform same actions as for transaction rollback:
+                   1. perform undo by writing V1 to Xj.
+                   2. write a log record <Ti , Xj, V1>
+                2. Whenever a log record <Ti start> is found where Ti is in
+                   undo-list,
+                   1. Write a log record <Ti abort>
+                   2. Remove Ti from undo-list
+                3. Stop when undo-list is empty
+
+                    i.e. <Ti start> has been found for every transaction in
+                       undo-list
+          After undo phase completes, normal transaction processing can
+           commence
+
+Database System Concepts - 6th Edition      16.23               ©Silberschatz, Korth and Sudarshan
+                                         Example of Recovery
+
+
+
+
+Database System Concepts - 6th Edition           16.24     ©Silberschatz, Korth and Sudarshan
+                                         Quiz Time
+
+
+        Quiz Q1: Repeating history performs redo on
+        (1) all transactions               (2) only transactions that committed
+        (3) only transactions that aborted (4) only incomplete transactions
+
+
+
+
+       Quiz Q2: Repeating history performs undo on
+       (1) all transactions               (2) only transactions that committed
+       (3) only transactions that aborted (4) only incomplete transactions
+
+
+
+
+Database System Concepts - 6th Edition      16.25              ©Silberschatz, Korth and Sudarshan
+                                         Log Record Buffering
+              Log record buffering: log records are buffered in main memory,
+                  instead of of being output directly to stable storage.
+                        Log records are output to stable storage when a block of log
+                         records in the buffer is full, or a log force operation is
+                         executed.
+              Log force is performed to commit a transaction by forcing all its log
+                  records (including the commit record) to stable storage.
+              Several log records can thus be output using a single output
+                  operation, reducing the I/O cost.
+
+
+
+
+Database System Concepts - 6th Edition            16.26                ©Silberschatz, Korth and Sudarshan
+                              Log Record Buffering (Cont.)
+             The rules below must be followed if log records are buffered:
+                       Log records are output to stable storage in the order in
+                        which they are created.
+                       Transaction Ti enters the commit state only when the log
+                        record
+                        <Ti commit> has been output to stable storage.
+                       Before a block of data in main memory is output to the
+                        database, all log records pertaining to data in that block
+                        must have been output to stable storage.
+                           This         rule is called the write-ahead logging or WAL rule
+                                – Strictly speaking WAL only requires undo information
+                                  to be output
+
+
+
+
+Database System Concepts - 6th Edition                    16.27               ©Silberschatz, Korth and Sudarshan
+                                            Database Buffering
+            Database maintains an in-memory buffer of data blocks
+                     When a new block is needed, if buffer is full an existing block
+                      needs to be removed from buffer
+                     If the block chosen for removal has been updated, it must be
+                      output to disk
+            The recovery algorithm supports the no-force policy: i.e., updated
+                blocks need not be written to disk when transaction commits
+                     force policy: requires updated blocks to be written at commit
+                         More           expensive commit
+            The recovery algorithm supports the steal policy:i.e., blocks
+                containing updates of uncommitted transactions can be written to
+                disk, even before the transaction commits
+                     Allows transactions to update more pages than can fit in buffer
+
+
+Database System Concepts - 6th Edition                  16.28          ©Silberschatz, Korth and Sudarshan
+                        Recovery with Early Lock Release
+             Support for high-concurrency locking techniques, such as
+                  those used for B+-tree concurrency control, which release locks
+                  early
+                       Supports “logical undo”
+             Recovery based on “repeating history”, whereby recovery
+                  executes exactly the same actions as normal processing
+             See book for details
+
+
+
+
+Database System Concepts - 6th Edition            16.29            ©Silberschatz, Korth and Sudarshan
+Remote Backup Systems
+
+
+
+
+  Database System Concepts, 6th Ed.
+       ©Silberschatz, Korth and Sudarshan
+  See www.db-book.com for conditions on re-use
+                                Remote Backup Systems
+
+              Remote backup systems provide high availability by allowing
+                  transaction processing to continue even if the primary site is
+                  destroyed.
+
+
+
+
+Database System Concepts - 6th Edition          16.31                ©Silberschatz, Korth and Sudarshan
+                     Remote Backup Systems (Cont.)
+         Detection of failure: Backup site must detect when primary site
+              has failed
+                   to distinguish primary site failure from link failure maintain
+                    several communication links between the primary and the
+                    remote backup.
+                   Heart-beat messages
+
+
+
+
+Database System Concepts - 6th Edition            16.32                 ©Silberschatz, Korth and Sudarshan
+                     Remote Backup Systems (Cont.)
+         Transfer of control:
+                   To take over control backup site first perform recovery using its
+                    copy of the database and all the long records it has received
+                    from the primary.
+                          Thus, completed transactions are redone and incomplete
+                          transactions are rolled back.
+                   When the backup site takes over processing it becomes the
+                    new primary
+                   To transfer control back to old primary when it recovers, old
+                    primary must receive redo logs from the old backup and apply
+                    all updates locally.
+
+
+
+
+Database System Concepts - 6th Edition            16.33               ©Silberschatz, Korth and Sudarshan
+                     Remote Backup Systems (Cont.)
+
+         Time to recover: To reduce delay in takeover, backup site
+              periodically proceses the redo log records (in effect, performing
+              recovery from previous database state), performs a checkpoint, and
+              can then delete earlier parts of the log.
+         Hot-Spare configuration permits very fast takeover:
+                Backup continually processes redo log record as they arrive,
+                    applying the updates locally.
+                When failure of the primary is detected the backup rolls back
+                    incomplete transactions, and is ready to process new
+                    transactions.
+         Alternative to remote backup: distributed database with replicated
+              data
+                   Remote backup is faster and cheaper, but less tolerant to failure
+                       more        on this in Chapter 19
+
+
+Database System Concepts - 6th Edition                 16.34         ©Silberschatz, Korth and Sudarshan
+End of Chapter 16
+
+
+
+
+Database System Concepts, 6th Ed.
+     ©Silberschatz, Korth and Sudarshan
+See www.db-book.com for conditions on re-use
+                                         Recovery Algorithms
+                  Consider transaction Ti that transfers $50 from account A to account B
+                        Two updates: subtract 50 from A and add 50 to B
+                  Transaction Ti requires updates to A and B to be output to the
+                   database.
+                        A failure may occur after one of these modifications have been
+                         made but before both of them are made.
+                        Modifying the database without ensuring that the transaction will
+                         commit may leave the database in an inconsistent state
+                        Not modifying the database may result in lost updates if failure
+                         occurs just after transaction commits
+                  Recovery algorithms have two parts
+                    1.   Actions taken during normal transaction processing to ensure
+                         enough information exists to recover from failures
+                    2.   Actions taken after a failure to recover the database contents to a
+                         state that ensures atomicity, consistency and durability
+
+
+Database System Concepts - 6th Edition               16.36                   ©Silberschatz, Korth and Sudarshan
+                                         Data Access (Cont.)
+          Each transaction Ti has its private work-area in which local copies of
+              all data items accessed and updated by it are kept.
+                     Ti's local copy of a data item X is called xi.
+          Transferring data items between system buffer blocks and its private
+              work-area done by:
+                   read(X) assigns the value of data item X to the local variable xi.
+                   write(X) assigns the value of local variable xi to data item {X} in
+                    the buffer block.
+                   Note: output(BX) need not immediately follow write(X). System
+                    can perform the output operation when it deems fit.
+          Transactions
+                   Must perform read(X) before accessing X for the first time
+                    (subsequent reads can be from local copy)
+                   write(X) can be executed at any time before the transaction
+                    commits
+Database System Concepts - 6th Edition             16.37               ©Silberschatz, Korth and Sudarshan
+                                 Buffer Management (Cont.)
+             Database buffer can be implemented either
+                       in an area of real main-memory reserved for the database,
+                        or
+                       in virtual memory
+             Implementing buffer in reserved main-memory has drawbacks:
+                       Memory is partitioned before-hand between database buffer
+                        and applications, limiting flexibility.
+                       Needs may change, and although operating system knows
+                        best how memory should be divided up at any time, it
+                        cannot change the partitioning of memory.
+
+
+
+
+Database System Concepts - 6th Edition           16.38               ©Silberschatz, Korth and Sudarshan
+                                 Buffer Management (Cont.)
+           Database buffers are generally implemented in virtual memory in
+                spite of some drawbacks:
+                  When operating system needs to evict a page that has been
+                    modified, the page is written to swap space on disk.
+                  When database decides to write buffer page to disk, buffer
+                    page may be in swap space, and may have to be read from
+                    swap space on disk and output to the database on disk,
+                    resulting in extra I/O!
+                      Known as dual paging problem.
+
+                  Ideally when OS needs to evict a page from the buffer, it
+                    should pass control to database, which in turn should
+                     1. Output the page to database instead of to swap space
+                         (making sure to output log records first), if it is modified
+                     2. Release the page from the buffer, for the OS to use
+                     Dual paging can thus be avoided, but common operating
+                         systems do not support such functionality.
+
+Database System Concepts - 6th Edition          16.39                  ©Silberschatz, Korth and Sudarshan
+                                         Fuzzy Checkpointing
+              To avoid long interruption of normal processing during
+               checkpointing, allow updates to happen during checkpointing
+              Fuzzy checkpointing is done as follows:
+                1. Temporarily stop all updates by transactions
+                2. Write a <checkpoint L> log record and force log to stable
+                   storage
+                3. Note list M of modified buffer blocks
+                4. Now permit transactions to proceed with their actions
+                5. Output to disk all modified buffer blocks in list M
+                     blocks should not be updated while being output
+
+                     Follow WAL: all log records pertaining to a block must be
+                       output before the block is output
+                6. Store a pointer to the checkpoint record in a fixed position
+                   last_checkpoint on disk
+
+
+Database System Concepts - 6th Edition           16.40          ©Silberschatz, Korth and Sudarshan
+                                Fuzzy Checkpointing (Cont.)
+            When recovering using a fuzzy checkpoint, start scan from the
+                checkpoint record pointed to by last_checkpoint
+                      Log records before last_checkpoint have their updates
+                       reflected in database on disk, and need not be redone.
+                      Incomplete checkpoints, where system had crashed while
+                       performing checkpoint, are handled safely
+
+
+
+
+                                                            ……
+                                                        <checkpoint L>
+                                                             …..
+                                                        <checkpoint L>
+                      last_checkpoint
+                                                             …..
+
+                                                           Log
+
+
+Database System Concepts - 6th Edition          16.41                ©Silberschatz, Korth and Sudarshan
+             Failure with Loss of Nonvolatile Storage
+              So far we assumed no loss of non-volatile storage
+              Technique similar to checkpointing used to deal with loss of non-
+                  volatile storage
+                    Periodically dump the entire content of the database to
+                      stable storage
+                    No transaction may be active during the dump procedure; a
+                      procedure similar to checkpointing must take place
+                        Output all log records currently residing in main memory
+                          onto stable storage.
+                        Output all buffer blocks onto the disk.
+
+                        Copy the contents of the database to stable storage.
+
+                        Output a record <dump> to log on stable storage.
+
+
+
+
+Database System Concepts - 6th Edition         16.42               ©Silberschatz, Korth and Sudarshan
+            Recovering from Failure of Non-Volatile Storage
+
+             To recover from disk failure
+                       restore database from most recent dump.
+                       Consult the log and redo all transactions that committed
+                        after the dump
+             Can be extended to allow transactions to be active during
+                  dump;
+                  known as fuzzy dump or online dump
+                       Will study fuzzy checkpointing later
+
+
+
+
+Database System Concepts - 6th Edition            16.43               ©Silberschatz, Korth and Sudarshan
+                                             ARIES
+          ARIES is a state of the art recovery method
+                     Incorporates numerous optimizations to reduce overheads
+                      during normal processing and to speed up recovery
+                        E.g. ARIES tracks what pages were “dirty”, i.e. had updates
+                          that were not written out, and performs redo operations
+                          only for those pages
+                        E.g. ARIES supports “physiological redo” operations, which
+                          can reduce logging overheads e.g. when free space in a
+                          page is compacted.
+                        E.g. ARIES supports efficient free space management
+
+                        E.g. ARIES supports high concurrency for index updates
+                     The recovery algorithm we studied earlier is modeled after
+                      ARIES, but greatly simplified by removing optimization
+                     See book for details
+
+
+
+Database System Concepts - 6th Edition          16.44                ©Silberschatz, Korth and Sudarshan
+                     Remote Backup Systems (Cont.)
+
+          Ensure durability of updates by delaying transaction commit until
+           update is logged at backup; avoid this delay by permitting lower
+           degrees of durability.
+          One-safe: commit as soon as transaction’s commit log record is
+           written at primary
+             Problem: updates may not arrive at backup before it takes over.
+          Two-very-safe: commit when transaction’s commit log record is
+           written at primary and backup
+             Reduces availability since transactions cannot commit if either
+               site fails.
+          Two-safe: proceed as in two-very-safe if both primary and backup
+           are active. If only the primary is active, the transaction commits as
+           soon as is commit log record is written at the primary.
+             Better availability than two-very-safe; avoids problem of lost
+               transactions in one-safe.
+
+
+Database System Concepts - 6th Edition     16.45                ©Silberschatz, Korth and Sudarshan
+

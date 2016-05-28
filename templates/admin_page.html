@@ -146,21 +146,27 @@
             </tr>
           </thead>
           <tbody>
-            <form action="#">
             {% for files in file_list %}
             <tr>
+              <form action="/work/review_content/" method="POST">
+              {%csrf_token%}
+              <input type="hidden" name="file_id" value="{{files.file_id}}">
               <td>{{files.file_id}}</td>
               <td><a href="/static/files/{{files.file_name}}">{{files.file_name}}</a></td>
               <td>{{files.course_name}}</td>
               <td>
+                <button class="btn waves-effect waves-light col s2 offset-s1" type="submit" name="action">Review
+                <i class="material-icons right">send</i>
               </td>
+              </form>
             </tr>
             {% endfor %}
-          </form>
+
           </tbody>
         </table>
       </div>
     </li>
+    
     <li>
       <div class="collapsible-header"><i class="material-icons">whatshot</i><h5>Accept keywords</h5></div>
       <div class="collapsible-body">
